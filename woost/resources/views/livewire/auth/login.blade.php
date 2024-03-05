@@ -35,4 +35,8 @@
             <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
         </p>
     </div>
+    <div x-data="{ count: 0 }">
+            <button @click="count++">Add</button>
+            <span x-text="count">0</span>
+        </div>
 </div>
