@@ -34,7 +34,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be cast (assigner un type a une propriété)
      *
      * @var array<string, string>
      */

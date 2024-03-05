@@ -30,7 +30,40 @@
         </div>
         @endif
     </div> -->
+
     <div class="font-sans text-gray-900 antialiased">
+        
+        <form>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name :</label>
+                        <input type="text" wire:model="name" class="form-control">
+                        @error('name') <span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Email :</label>
+                        <input type="text" wire:model="email" class="form-control">
+                        @error('email') <span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Password :</label>
+                        <input type="password" wire:model="password" class="form-control">
+                        @error('password') <span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-12 text-center">
+                    <button class="btn text-white btn-success" wire:click.prevent="registerStore">Register</button>
+                </div>
+                <div class="col-md-12">
+                    <a class="text-primary" wire:click.prevent="register"><strong>Login</strong></a>
+                </div>
+            </div>
+        </form>
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-[#f8f4f3]">
             <div>
                 <a href="/">
@@ -39,7 +72,7 @@
             </div>
 
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                <form method="POST" >
+                <form method="POST">
 
                     <div class="py-8">
                         <center>
@@ -76,7 +109,7 @@
                     </div>
 
                     <div class="flex items-center justify-end mt-4">
-                        <a class="hover:underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
+                        <a class="hover:underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Forgot your password?
                         </a>
 
