@@ -42,11 +42,20 @@
     </style>
 
     <script>
-        let navToggler = document.querySelector('.nav-toggler');
+        const navToggler = document.querySelector('.toggleNav');
+        const passwordInput = document.querySelector('#password');
+        const togglePasswordButton = document.querySelector('#togglePassword');
+
+        togglePasswordButton.addEventListener('click', () => {
+
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+
+            passwordInput.setAttribute('type', type);
+        });
 
         navToggler.addEventListener('click', () => {
 
-            let menu = document.querySelector('#navigation');
+            const menu = document.querySelector('#navigation');
 
             menu.classList.toggle('menu-visible');
             menu.classList.toggle('menu-hidden');

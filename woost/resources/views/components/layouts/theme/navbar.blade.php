@@ -5,7 +5,7 @@
         </svg>
         <span class="text-xl text-white font-bold uppercase tracking-wide">WOOST</span>
     </a>
-    <button class="text-white inline-flex p-3 hover:bg-gray-900 rounded lg:hidden ml-auto hover:text-white outline-none nav-toggler" data-target="#navigation">
+    <button class="text-white inline-flex p-3 hover:bg-gray-900 rounded lg:hidden ml-auto hover:text-white outline-none toggleNav" data-target="#navigation">
         <i class="material-icons">menu</i>
     </button>
     <div class="menu-hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto" id="navigation">
