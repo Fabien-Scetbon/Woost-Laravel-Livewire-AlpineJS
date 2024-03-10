@@ -4,36 +4,49 @@ namespace App\Livewire\Auth;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-use Hash;
-use App\User;
+use Illuminate\Support\Facades\Validator;
 
 class Login extends Component
 {
-    public $users, $email, $password, $name;
-    public $registerForm = false;
+    public $email = '';
+    public $password = '';
 
-    public function render()
+    // Message d'erreurs lors de la validation
+
+    protected function messages()
     {
-        return view('livewire.login-register');
-    }
-
-    private function resetInputFields(){
-        $this->name = '';
-        $this->email = '';
-        $this->password = '';
+        return [
+            'email.required' => "L'adresse mail est obligatoire.",
+            'email.email' => 'Veuillez entrer une adresse mail valide.',
+            'password.required' => "Le mot de passe est obligatoire.",
+        ];
     }
 
     public function login()
     {
-        $validatedDate = $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $validatedData = Validator::make(
+            [
+                'email' => $this->email,
+                'password' => $this->password,
+            ],
+            [
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ], $this->messages()
+
+        )->validate();
+
         
-        if(\Auth::attempt(array('email' => $this->email, 'password' => $this->password))){
-                session()->flash('message', "You are Login successful.");
-        }else{
-            session()->flash('error', 'email and password are wrong.');
+        if (Auth::attempt(
+            [
+                'email' => $this->email,
+                'password' => $this->password,
+            ]
+        )) {
+            session()->flash('message', "Bienvenue !");
+        } else {
+            session()->flash('error', 'Vos informations sont inexactes.');
         }
     }
+
 }
