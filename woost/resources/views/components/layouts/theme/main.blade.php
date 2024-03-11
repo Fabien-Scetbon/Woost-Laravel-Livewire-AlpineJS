@@ -54,7 +54,7 @@
         const passwordInput = document.querySelector('#password');
         const togglePasswordButton = document.querySelector('#togglePassword');
 
-        close.classList.add('hidden-icon');
+        // close.classList.add('hidden-icon');
 
         togglePasswordButton.addEventListener('click', () => {
 
