@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Livewire\Auth\Login;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +19,8 @@ Route::get('/', function () {
 
 Route::get('login', function () {
     return view('auth.login');
-});
+})->name('login');
 
-// Route::get('login', Login::class)->name('login');
-
+Route::get('register', function () {
+    return view('auth.register');
+})->name('register');
