@@ -10,7 +10,7 @@
             <div>
                 <label for="firstname" class="block text-sm font-medium leading-6 text-gray-900">Prénom</label>
                 <div class="mt-2">
-                    <input wire:model.defer="firstname" name="firstname" type="text" required class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <input wire:model.defer="firstname" name="firstname" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 @error('firstname') <small class="text-red-500">{{ $message }}</small> @enderror
             </div>
@@ -18,7 +18,7 @@
             <div>
                 <label for="lastname" class="block text-sm font-medium leading-6 text-gray-900">Nom</label>
                 <div class="mt-2">
-                    <input wire:model.defer="lastname" name="lastname" type="text" required class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <input wire:model.defer="lastname" name="lastname" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 @error('lastname') <small class="text-red-500">{{ $message }}</small> @enderror
             </div>
@@ -26,7 +26,7 @@
             <div>
                 <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Adresse mail</label>
                 <div class="mt-2">
-                    <input wire:model.defer="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <input wire:model.defer="email" name="email" autocomplete="email" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 @error('email') <small class="text-red-500">{{ $message }}</small> @enderror
             </div>
@@ -36,7 +36,7 @@
                     <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Mot de passe</label>
                 </div>
                 <div class="mt-2 relative">
-                    <input wire:model.defer="password" id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <input wire:model.defer="password" id="password" name="password" type="password" autocomplete="current-password" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                         <button type="button" id="togglePassword" class="text-gray-500 focus:outline-none focus:text-gray-600 hover:text-gray-600">
                             <svg id="open" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="eye">
@@ -52,17 +52,17 @@
             </div>
 
             <div>
-                <label for="password_confirm" class="block text-sm font-medium leading-6 text-gray-900">Vérification du Mot de passe</label>
+                <label for="password_confirmation" class="block text-sm font-medium leading-6 text-gray-900">Vérification du Mot de passe</label>
                 <div class="mt-2">
-                    <input wire:model.defer="password_confirm" name="password_confirm" type="password" required class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <input wire:model.defer="password_confirmation" name="password_confirmation" type="password" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
-                @error('password_confirm') <small class="text-red-500">{{ $message }}</small> @enderror
+                @error('password_confirmation') <small class="text-red-500">{{ $message }}</small> @enderror
             </div>
 
             <div>
-                <button wire:loading.remove wire:submit="login" type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Se connecter</button>
+                <button wire:loading.remove wire:submit="register" type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">S'inscrire</button>
 
-                <button wire:loading.inline-flex wire:target="login" type="button" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <button wire:loading.inline-flex wire:target="register" type="button" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     <svg class="w-6 h-6 animate-spin" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>

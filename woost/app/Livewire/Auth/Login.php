@@ -43,9 +43,13 @@ class Login extends Component
                 'password' => $this->password,
             ]
         )) {
+
             session()->flash('message', "Bienvenue !");
+
         } else {
+
             session()->flash('error', 'Vos informations sont inexactes.');
+
         }
     }
 

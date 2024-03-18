@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 
 use Livewire\Component;
@@ -13,16 +15,22 @@ class Register extends Component
     public $lastname ='';
     public $email = '';
     public $password = '';
-    public $password_confirm = '';
+    public $password_confirmation = '';
 
     // Message d'erreurs lors de la validation
 
     protected function messages()
     {
         return [
+            'firstname.required' => 'Le prénom est obligatoire.',
+            'lastname.required' => 'Le nom est obligatoire.',
             'email.required' => "L'adresse mail est obligatoire.",
             'email.email' => 'Veuillez entrer une adresse mail valide.',
-            'password.required' => "Le mot de passe est obligatoire.",
+            'email.unique' => 'Cette adresse mail existe déjà.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+            'password.confirmed' => 'Les mots de passe sont différents.',
+            'password_confirmation.required' => 'Le mot de passe est obligatoire.',
         ];
     }
 
@@ -34,14 +42,14 @@ class Register extends Component
                 'lastname' => $this->lastname,
                 'email' => $this->email,
                 'password' => $this->password,
-                'password_confirm' => $this->password_confirm,
+                'password_confirmation' => $this->password_confirmation,
             ],
             [
                 'firstname' => ['required'],
                 'lastname' => ['required'],
-                'email' => ['required', 'email','unique:email'],
-                'password' => ['required', 'min:8'],
-                'password_confirm' => ['required', 'min:8'],
+                'email' => ['required', 'email','unique:users'],
+                'password' => ['required', 'confirmed', Password::min(8)],
+                'password_confirmation' => ['required'],
             ],
             $this->messages()
 
@@ -50,6 +58,9 @@ class Register extends Component
         foreach (['firstname', 'lastname'] as $val) {
             $validatedData[$val] = Str::ucfirst($validatedData[$val]);
         }
+
+        User::create($validatedData);
+        session()->flash('message', "Votre compte a été crée avec succès !");
 
     }
 }
