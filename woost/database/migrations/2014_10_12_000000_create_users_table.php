@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->bigInteger('postalcode')->nullable();
+            $table->string('postalcode', 5)->nullable();
             $table->string('password');
             $table->unsignedTinyInteger('status')->default(\App\Enums\UserStatus::Member);
             $table->boolean('is_ban')->default(false);
