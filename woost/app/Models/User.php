@@ -22,7 +22,7 @@ class User extends Authenticatable
         'lastname',
         'email',
         'postalcode',
-        'is_admin',
+        'status',
         'is_ban',
         'password',
     ];

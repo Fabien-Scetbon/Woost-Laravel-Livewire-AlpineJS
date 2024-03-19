@@ -4,8 +4,10 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
+
 
 use Livewire\Component;
 
@@ -59,7 +61,12 @@ class Register extends Component
             $validatedData[$val] = Str::ucfirst($validatedData[$val]);
         }
 
+        $this->password = Hash::make($this->password); 
+
         User::create($validatedData);
+
+        $this->reset([ 'firstname', 'lastname', 'email' , 'password', 'password_confirmation']);
+        
         session()->flash('message', "Votre compte a été crée avec succès !");
 
     }
