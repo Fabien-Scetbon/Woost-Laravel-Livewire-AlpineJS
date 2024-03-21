@@ -15,11 +15,11 @@
 
 <body class="body__wrapper" id="original-content">
 
-    @include('components.layouts.theme.navbar')
+    @include('components.layouts.auth.navbar')
 
     @yield('mainContent')
 
-    @include('components.layouts.theme.footer')
+    @include('components.layouts.auth.footer')
 
     <style>
         .menu-visible {
