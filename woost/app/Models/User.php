@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -46,4 +47,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // renvoie une date formatée de created_at
+    public function formatDate($date)
+    {
+        return Carbon::parse($date)->translatedFormat('d M Y à H:i');
+    }
+
+    public function fullName()
+    {
+        return $this->firstname.' '.$this->lastname;
+    }
 }
