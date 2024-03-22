@@ -5,10 +5,9 @@
                 <div class="p-10">
                     <div class="px-4 sm:px-6 lg:px-8">
                         <div class="flex flex-row justify-between">
-                            <h1 class="sm:text-base md:text-lg font-semibold text-gray-900 mb-0 md:mb-2">Liste des commentaires</h1>
+                            <h1 class="sm:text-base md:text-lg font-semibold text-gray-900 mb-0 md:mb-2">Liste des utilisateurs</h1>
                         </div>
-
-                        @if($this->checkMessages())
+                        @if(session()->has('deleteUserSuccess'))
                         <div class="rounded-md bg-blue-50 p-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
@@ -18,13 +17,7 @@
                                 </div>
                                 <div class="ml-3 flex-1 md:flex md:justify-between">
                                     <p class="text-sm text-blue-700">
-                                        @if(session()->has('addUserSuccess'))
-                                        {{ session('addUserSuccess') }}
-                                        @elseif(session()->has('updateUserSuccess'))
-                                        {{ session('updateUserSuccess') }}
-                                        @elseif(session()->has('deleteUserSuccess'))
                                         {{ session('deleteUserSuccess') }}
-                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -33,7 +26,7 @@
 
                         <div class="mt-6 flex flex-col">
                             <div class="flex justify-between flex-1 mb-2 sm:mb-0 sm:hidden">
-                                <!-- @include('backend.partials.paginator-mobile', ['paginator' => $this->listeUser]) -->
+                            <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p>
                             </div>
                             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -43,11 +36,11 @@
                                                 <div>
                                                     <p class="text-sm text-gray-700 leading-5">
                                                         <span>Résultats de</span>
-                                                        <span class="font-medium">{{ $this->listeUsers->firstItem() }}</span>
+                                                        <span class="font-medium">{{ $this->users->firstItem() }}</span>
                                                         <span>à</span>
-                                                        <span class="font-medium">{{ $this->listeUsers->lastItem() }}</span>
+                                                        <span class="font-medium">{{ $this->users->lastItem() }}</span>
                                                         <br />(
-                                                        <span class="font-medium">{{ $this->listeUsers->total() }}</span>
+                                                        <span class="font-medium">{{ $this->users->total() }}</span>
                                                         <span>résultats</span>)
                                                     </p>
                                                 </div>
@@ -60,7 +53,7 @@
                                                     <div class="flex-1 mt-2 text-sm text-gray-900">utilisateurs par page</div>
                                                 </div>
                                                 <div>
-                                                    {{ $this->listeUsers->onEachSide(1)->links() }}
+                                                    {{ $this->users->onEachSide(1)->links() }}
                                                 </div>
                                             </div>
                                         </div>
@@ -110,6 +103,7 @@
                                                     </th>
                                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Statut</th>
                                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Restrictions</th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Restrictions</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="divide-y divide-gray-200 bg-white">
@@ -137,16 +131,18 @@
                                                         <div class="md:flex sm:w-48 mt-4 sm:mt-0">
                                                             <select wire:model="searchStatus" id="choicestatus" name="choicestatus" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-500 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                                 <option value="all" selected>Tous</option>
-                                                                <option value="{{\App\Enums\ArticleStatus::Depublier}}">Membre</option>
-                                                                <option value="{{\App\Enums\ArticleStatus::Publier}}">Admin</option>
+                                                                <option value="{{\App\Enums\UserStatus::Member}}">Membre</option>
+                                                                <option value="{{\App\Enums\UserStatus::Admin}}">Admin</option>
                                                             </select>
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                                                     </td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
+                                                    </td>
 
                                                 </tr>
-                                                @forelse($this->listeUsers as $user)
+                                                @forelse($this->users as $user)
                                                 <tr>
                                                     <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 px-6">
                                                         {{ $user->lastname }}
@@ -169,6 +165,13 @@
                                                     <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 px-6">
                                                         {{ $user->is_ban }}
                                                     </td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
+                                                        <span wire:click="setUserToDelete( {{ $user->id }} )" class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700 hover:bg-red-500 hover:text-white hover:cursor-pointer">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                            </svg>
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
@@ -185,16 +188,16 @@
                                                 <div>
                                                     <p class="text-sm text-gray-700 leading-5">
                                                         <span>Résultats de</span>
-                                                        <span class="font-medium">{{ $this->listeUser->firstItem() }}</span>
+                                                        <span class="font-medium">{{ $this->users->firstItem() }}</span>
                                                         <span>à</span>
-                                                        <span class="font-medium">{{ $this->listeUser->lastItem() }}</span>
+                                                        <span class="font-medium">{{ $this->users->lastItem() }}</span>
                                                         <br />(
-                                                        <span class="font-medium">{{ $this->listeUser->total() }}</span>
+                                                        <span class="font-medium">{{ $this->users->total() }}</span>
                                                         <span>résultats</span>)
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    {{ $this->listeUser->onEachSide(1)->links() }}
+                                                    {{ $this->users->onEachSide(1)->links() }}
                                                 </div>
                                             </div>
                                         </div>
@@ -203,7 +206,7 @@
                             </div>
                         </div>
                         <div class="flex flex-1 justify-between sm:hidden mt-5 sm:mt-0">
-                            <!-- @include('backend.partials.paginator-mobile', ['paginator' => $this->listeUser]) -->
+                            <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p>
                         </div>
                     </div>
                 </div>

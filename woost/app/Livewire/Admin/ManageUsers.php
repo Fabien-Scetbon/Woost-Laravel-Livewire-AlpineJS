@@ -3,15 +3,14 @@
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
+use Livewire\Attributes\Computed;
+use Livewire\WithPagination;
 use App\Models\User;
 use App\Enums\UserStatus;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 
 class ManageUsers extends Component
@@ -31,11 +30,9 @@ class ManageUsers extends Component
 
     public $searchStatus = '';
 
-    
-
     // gere l'affichage des commentaires par asc et desc selon 4 critères
 
-    public $sortBy = 'nom_auteur'; // par défaut
+    public $sortBy = 'lastname'; // par défaut
 
     public $ascending = true;
 
@@ -43,48 +40,44 @@ class ManageUsers extends Component
 
     public $openDeleteModal = false;
 
-    public $commentaireToDeleteId = null;
+    public $userToDeleteId = null;
 
-    // met a jour la liste des commentaires quand un article vient d'etre supprime
-
-    protected $listeners = ['articleSupprime' => '$refresh'];
-
-    // détecter quelle colonne doit être triée    Commentaires
+    // détecter quelle colonne doit être triée   
     private function getSortColumn()
     {
         return match ($this->sortBy) {
-            'categorie' => 'categorie_articles.nom',
-            'titre' => 'articles.titre',
-            'created_at' => 'commentaires.created_at',
-            default => 'commentaires.nom_auteur',
+            'firstname' => 'firstname',
+            'email' => 'email',
+            'created_at' => 'created_at',
+            'postalcode' => 'postalcode',
+            default => 'lastname',
         };
     }
 
     // recupère la liste des articles sauf les soft-deleted
-    public function getListeCommentairesProperty(): LengthAwarePaginator
+    #[Computed]
+    public function users(): LengthAwarePaginator
     {
-        $commentaires = Commentaire::with( 'article.categorie')
-            ->select('commentaires.id', 'commentaires.nom_auteur', 'commentaires.contenu', 'commentaires.article_id', 'commentaires.created_at')
-            ->join('articles', 'articles.id', '=', 'commentaires.article_id')
-            ->join('categorie_articles', 'categorie_articles.id', '=', 'articles.categorie_article_id')
-            ->when($this->searchCategorie, function ($query, $searchCategorie) {
-                $query->whereHas('article.categorie', function ($innerQuery) use ($searchCategorie) {
-                    $innerQuery->where('nom', 'like', '%' . $searchCategorie . '%');
-                });
+        $users = User::select('id', 'firstname', 'lastname', 'email', 'postalcode', 'status', 'is_ban', 'created_at')
+            ->when($this->searchUser, function ($query, $searchUser) {
+                $query->where('lastname', 'like', '%' . $searchUser . '%')
+                    ->orWhere('firstname', 'like', '%' . $searchUser . '%');
             })
-            ->when($this->searchAuteur, function ($query, $searchAuteur) {
-                $query->where('commentaires.nom_auteur', 'like', '%' . $searchAuteur . '%');
+            ->when($this->searchEmail, function ($query, $searchEmail) {
+                $query->where('email', 'like', '%' . $searchEmail . '%');
             })
-            ->when($this->searchArticle, function ($query, $searchArticle) {
-                $query->whereHas('article', function ($innerQuery) use ($searchArticle) {
-                    $innerQuery->where('titre', 'like', '%' . $searchArticle . '%');
-                });
+            ->when($this->searchPostalcode, function ($query, $searchPostalcode) {
+                $query->where('postalcode', 'like', '%' . $searchPostalcode . '%');
+            })
+            ->when($this->searchStatus, function ($query, $searchStatus) {
+                $query->where('status', 'like', '%' . $searchStatus . '%');
             });
+
 
         $order = $this->ascending ? 'asc' : 'desc';
 
-        return $commentaires->orderBy($this->getSortColumn(), $order)
-            ->paginate($this->showCommentaire);
+        return $users->orderBy($this->getSortColumn(), $order)
+            ->paginate($this->showUser);
     }
 
     public function toggleSorting($column)
@@ -96,30 +89,31 @@ class ManageUsers extends Component
             $this->ascending = true;
         }
 
-        $this->getListeCommentairesProperty();
+        $this->users();
     }
 
-    public function setCommentaireToDelete($commentaireID)
+    public function setUserToDelete($userID)
     {
-        $this->commentaireToDeleteId = $commentaireID;
+        $this->userToDeleteId = $userID;
         $this->openDeleteModal = true;
     }
 
-    public function deleteCommentaire()
+    public function deleteUser()
     {
-        if (Auth::user()->hasRole('administrator'))
-        {
-            $commentaire = Commentaire::find($this->commentaireToDeleteId);
-            $commentaire->delete();
-            $this->reset(['commentaireToDeleteId']);
-            session()->flash('deleteCommentaireSuccess', 'Le commentaire a bien été supprimé.');
-
-        } else {
-            throw ValidationException::withMessages([
-                'no_authorization' => "Vous n'êtes pas autorisé à supprimer des commentaires.",
-            ]);
-        }
+        $user = User::find($this->userToDeleteId);
+            $user->delete();
+            $this->reset(['userToDeleteId']);
+            session()->flash('deleteUserSuccess', "L'utilisateur a bien été supprimé.");
+        
+        // if (Auth::user()->hasRole('administrator')) {
+        //     $user = User::find($this->userToDeleteId);
+        //     $user->delete();
+        //     $this->reset(['userToDeleteId']);
+        //     session()->flash('deleteUserSuccess', "L'utilisateur a bien été supprimé.");
+        // } else {
+        //     throw ValidationException::withMessages([
+        //         'no_authorization' => "Vous n'êtes pas autorisé à supprimer des utilisateurs.",
+        //     ]);
+        // }
     }
 }
-
-
