@@ -6,6 +6,14 @@
                     <div class="px-4 sm:px-6 lg:px-8">
                         <div class="flex flex-row justify-between">
                             <h1 class="sm:text-base md:text-lg font-semibold text-gray-900 mb-0 md:mb-2">Liste des utilisateurs</h1>
+                            <div class="flex mt-4 sm:mt-0 sm:flex-none">
+                                <a href="{{ route('admin.edit_user') }}" class="inline-flex justify-center md:justify-start flex-grow md:flex-grow-0 md:ml-0 items-center rounded-md border border-transparent bg-sky-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-ml-0.5 mr-2 h-4 w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                    Ajouter un utiisateur
+                                </a>
+                            </div>
                         </div>
                         @if(session()->has('deleteUserSuccess'))
                         <div class="rounded-md bg-blue-50 p-4">
@@ -144,7 +152,8 @@
 
                                                 </tr>
                                                 @forelse($this->users as $user)
-                                                <tr wire:key="{{ $user->id }}">
+                                                <tr>
+                                                <tr wire:click="redirectToControlUser( '{{ $user->id }}' )" wire:key="{{ $user->id }}" class="hover:bg-gray-100 hover:cursor-pointer">
                                                     <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 px-6">
                                                         {{ $user->lastname }}
                                                     </td>

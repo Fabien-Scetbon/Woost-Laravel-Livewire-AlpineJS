@@ -28,7 +28,7 @@ class ManageUsers extends Component
 
     public $searchPostalcode = '';
 
-    public $searchStatus = '';
+    public $searchStatus = null;
 
     // gere l'affichage des commentaires par asc et desc selon 6 critères
 
@@ -69,8 +69,8 @@ class ManageUsers extends Component
             ->when($this->searchPostalcode, function ($query, $searchPostalcode) {
                 $query->where('postalcode', 'like', '%' . $searchPostalcode . '%');
             })
-            ->when($this->searchStatus, function ($query, $searchStatus) {
-                $query->where('status', 'like', '%' . $searchStatus . '%');
+            ->when(isset($this->searchStatus) && $this->searchStatus !== 'all', function ($query) {
+                $query->where('status', $this->searchStatus);
             });
 
         $order = $this->ascending ? 'asc' : 'desc';
@@ -114,5 +114,10 @@ class ManageUsers extends Component
         //         'no_authorization' => "Vous n'êtes pas autorisé à supprimer des utilisateurs.",
         //     ]);
         // }
+    }
+
+    public function redirectToControlUser($userId)
+    {
+        return redirect()->route('admin.control_user', ['userId' => $userId]);
     }
 }
