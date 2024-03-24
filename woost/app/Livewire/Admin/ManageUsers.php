@@ -30,7 +30,7 @@ class ManageUsers extends Component
 
     public $searchStatus = '';
 
-    // gere l'affichage des commentaires par asc et desc selon 4 critères
+    // gere l'affichage des commentaires par asc et desc selon 6 critères
 
     public $sortBy = 'lastname'; // par défaut
 
@@ -54,7 +54,7 @@ class ManageUsers extends Component
         };
     }
 
-    // recupère la liste des articles sauf les soft-deleted
+    // recupère la liste des utilisateurs
     #[Computed]
     public function users(): LengthAwarePaginator
     {
@@ -72,7 +72,6 @@ class ManageUsers extends Component
             ->when($this->searchStatus, function ($query, $searchStatus) {
                 $query->where('status', 'like', '%' . $searchStatus . '%');
             });
-
 
         $order = $this->ascending ? 'asc' : 'desc';
 

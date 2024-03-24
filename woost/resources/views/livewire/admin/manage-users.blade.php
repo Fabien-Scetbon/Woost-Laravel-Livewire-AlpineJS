@@ -26,7 +26,7 @@
 
                         <div class="mt-6 flex flex-col">
                             <div class="flex justify-between flex-1 mb-2 sm:mb-0 sm:hidden">
-                            <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p>
+                                <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p>
                             </div>
                             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -45,7 +45,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="flex gap-4">
-                                                    <select wire:model="showUser" id="User" name="User" class="rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                                    <select wire:model.live="showUser" id="User" name="User" class="rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                                                         <option value="10">10</option>
                                                         <option value="50">50</option>
                                                         <option value="100">100</option>
@@ -53,7 +53,7 @@
                                                     <div class="flex-1 mt-2 text-sm text-gray-900">utilisateurs par page</div>
                                                 </div>
                                                 <div>
-                                                    {{ $this->users->onEachSide(1)->links() }}
+                                                    {{ $this->users->links() }}
                                                 </div>
                                             </div>
                                         </div>
@@ -103,33 +103,34 @@
                                                     </th>
                                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Statut</th>
                                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Restrictions</th>
-                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Restrictions</th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                                                 </tr>
                                             </thead>
                                             <tbody class="divide-y divide-gray-200 bg-white">
                                                 <tr>
                                                     <td class="whitespace-nowrap pl-6 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-56">
-                                                            <input wire:model.debounce.500ms="searchUser" type="text" class="block rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mt-5 md:mt-0" placeholder="Recherche utilisateur">
+                                                            <input wire:model.live.debounce.500ms="searchUser" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche utilisateur">
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                                                     </td>
                                                     <td class="whitespace-nowrap pl-6 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-48 mt-4 sm:mt-0">
-                                                            <input wire:model.debounce.500ms="searchEmail" type="text" class="block rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mt-5 md:mt-0" placeholder="Recherche mail">
+                                                            <input wire:model.live.debounce.500ms="searchEmail" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche mail">
+
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap pl-7 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-48 mt-4 sm:mt-0">
-                                                            <input wire:model.debounce.500ms="searchPostalcode" type="text" class="block rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mt-5 md:mt-0" placeholder="Recherche code postal">
+                                                            <input wire:model.live.debounce.500ms="searchPostalcode" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche code postal">
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-48 mt-4 sm:mt-0">
-                                                            <select wire:model="searchStatus" id="choicestatus" name="choicestatus" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-500 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                                            <select wire:model.live="searchStatus" id="choicestatus" name="choicestatus" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-500 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                                 <option value="all" selected>Tous</option>
                                                                 <option value="{{\App\Enums\UserStatus::Member}}">Membre</option>
                                                                 <option value="{{\App\Enums\UserStatus::Admin}}">Admin</option>
@@ -143,7 +144,7 @@
 
                                                 </tr>
                                                 @forelse($this->users as $user)
-                                                <tr>
+                                                <tr wire:key="{{ $user->id }}">
                                                     <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 px-6">
                                                         {{ $user->lastname }}
                                                     </td>
@@ -197,7 +198,7 @@
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    {{ $this->users->onEachSide(1)->links() }}
+                                                    {{ $this->users->links() }}
                                                 </div>
                                             </div>
                                         </div>
