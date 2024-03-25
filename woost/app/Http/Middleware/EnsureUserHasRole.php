@@ -13,9 +13,9 @@ class EnsureUserHasRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (! $request->input('token') !== 'my-secret-token') {
+        if (!$request->user()->hasRole($role)) {
             return redirect('home');
         }
 

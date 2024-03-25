@@ -2,16 +2,15 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\User;
+
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
-use App\Models\User;
-use App\Enums\UserStatus;
-use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\UserStatus;
 
 class ManageUsers extends Component
 
@@ -22,23 +21,23 @@ class ManageUsers extends Component
 
     // variables pour la recherche
 
-    public $searchUser = '';
+    public string $searchUser = '';
 
-    public $searchEmail = '';
+    public string $searchEmail = '';
 
-    public $searchPostalcode = '';
+    public string $searchPostalcode = '';
 
     public $searchStatus = null;
 
     // gere l'affichage des commentaires par asc et desc selon 6 critères
 
-    public $sortBy = 'lastname'; // par défaut
+    public string $sortBy = 'lastname'; // par défaut
 
-    public $ascending = true;
+    public bool $ascending = true;
 
     // variable pour delete
 
-    public $openDeleteModal = false;
+    public bool $openDeleteModal = false;
 
     public $userToDeleteId = null;
 
@@ -99,21 +98,16 @@ class ManageUsers extends Component
 
     public function deleteUser()
     {
-        $user = User::find($this->userToDeleteId);
+        if (Auth::user()->hasRole('Admin')) { // Pb VSC qui n'associe pas Auth::user() a la classe User
+            $user = User::find($this->userToDeleteId);
             $user->delete();
             $this->reset(['userToDeleteId']);
             session()->flash('deleteUserSuccess', "L'utilisateur a bien été supprimé.");
-        
-        // if (Auth::user()->hasRole('administrator')) {
-        //     $user = User::find($this->userToDeleteId);
-        //     $user->delete();
-        //     $this->reset(['userToDeleteId']);
-        //     session()->flash('deleteUserSuccess', "L'utilisateur a bien été supprimé.");
-        // } else {
-        //     throw ValidationException::withMessages([
-        //         'no_authorization' => "Vous n'êtes pas autorisé à supprimer des utilisateurs.",
-        //     ]);
-        // }
+        } else {
+            throw ValidationException::withMessages([
+                'no_authorization' => "Vous n'êtes pas autorisé à supprimer des utilisateurs.",
+            ]);
+        }
     }
 
     public function redirectToControlUser($userId)

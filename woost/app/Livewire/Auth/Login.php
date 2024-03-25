@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Validator;
 
 class Login extends Component
 {
-    public $email = '';
-    public $password = '';
+    public string $email = '';
+    public string $password = '';
 
     // Message d'erreurs lors de la validation
 

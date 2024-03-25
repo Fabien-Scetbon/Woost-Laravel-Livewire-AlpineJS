@@ -3,7 +3,7 @@
             }">
 
     <div class="flex flex-col justify-start bg-indigo-600 mb-4 px-6 py-2.5 sm:px-3.5 rounded">
-        <p class="text-md text-white my-1">{{ $subTitleArticleEditing }}</p>
+        <p class="text-md text-white my-1">{{ $subTitleUserEditing }}</p>
         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
             <input wire:model.defer="titreArticle" type="text" name="titrearticle" id="titrearticle" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm sm:leading-6" placeholder="Votre titre">
         </div>
@@ -51,9 +51,9 @@
                             @if ($image)
                             <img class="max-h-56 w-auto mx-auto" src="{{ $image->temporaryUrl() }}">
                             @else
-                            @if(!$creatingNewArticle)
+                            @if(!$creatingNewUser)
                             <p class="text-sm text-gray-500 mb-1">Image actuelle</p>
-                            <img class="w-80 mx-auto" src="{{ asset('storage/articles/' . $article->image) }}" alt="Image de {{ $article->titre }}">
+                            {{-- <img class="w-80 mx-auto" src="{{ asset('storage/articles/' . $article->image) }}" alt="Image de {{ $article->titre }}"> --}}
                             @endif
                             @endif
                         </div>
@@ -61,108 +61,13 @@
 
                 </div>
 
-                <div>
-                    <div class="flex flex-col w-full" wire:ignore>
-                        <div x-data x-init="initEditor($refs['{{ $name }}'])" wire:key="{{$name}}" x-ref="{{$name}}">
-                            {!! $this->content !!}
-                        </div>
-                    </div>
-                </div>
-
-                {{--<div class="col-span-full">
-                    <label for="content" class="block text-sm font-medium leading-6 text-gray-900">Contenu de l'article</label>
-                    <div wire:ignore class="mt-2">
-                        <textarea wire:model.defer="contenu" id="contenu" name="contenu" rows="3"
-                                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{!! $contenu !!}</textarea>
-                    </div>
-                    @error('contenu') <small class="text-red-500">{{ $message }}</small> @enderror
-                <p class="mt-3 text-sm leading-6 text-gray-600">Complétez ou modifiez le contenu
-                    de votre article.</p>
-            </div>--}}
+                
         </div>
 
         {{-- Coté droit --}}
         <div class="md:w-1/4 overflow-hidden rounded-lg bg-white shadow p-2">
-            <div x-data="{ openDescriptionInput : false }">
-                <div class="sm:mt-0 md:mt-4 border-b border-gray-900/10 pb-6">
-                    <p class="text-sm text-gray-900 font-medium pb-1 mb-1">
-                        Catégorie de l'article
-                    </p>
-                    <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <div class="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-sm text-gray-500 sm:leading-6">
-                            {{ $articleCategorieNom !== '' ? $articleCategorieNom : "Pas de catégorie" }}
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-900 pb-1 mt-2">
-                        {{ !$creatingNewArticle ? "Vous pouvez modifier la catégorie de l'article à l'aide de la recherche." : "Veuillez choisir une catégorie pour votre article." }}
-                    </p>
 
-                    <input wire:model.debounce.500ms="searchCategorie" type="text" class="block rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm md:mt-0" placeholder="Rechercher une catégorie">
-                    @error('categorie_article_id') <small class="text-red-500">{{ $message }}</small> @enderror
-
-                    @if (!empty($searchCategorie))
-                    <ul role="list" class="mt-1 divide-y divide-gray-100 sm:max-w-md">
-                        @forelse($this->listeCategoriesArticle as $categorie)
-                        <li class="flex gap-x-4 py-2 pl-2 text-sm text-gray-900 hover:bg-gray-100 hover:cursor-pointer" wire:click="selectCategory({{ $categorie->id }}, '{{ addslashes($categorie->nom) }}')">
-                            {{ $categorie->nom }}
-                        </li>
-                        @empty
-                        <p class="text-sm text-blue-500 italic">Aucun résultat.</p>
-                        @endforelse
-                    </ul>
-
-                    @endif
-                    <p class="text-sm text-blue-700">
-                        @if(session()->has('linkCategorieSuccess'))
-                        {{ session('linkCategorieSuccess') }}
-                        @endif
-                    </p>
-                </div>
-
-            </div>
-            @if(!$creatingNewArticle)
-            <div class="sm:mt-0 md:mt-4 md:mb-4 border-b border-gray-900/10">
-                <p class="text-sm text-gray-900 font-medium pb-1 mb-1">
-                    Tags de l'article
-                </p>
-                <div class="flex flex-wrap space-x-2 space-y-1 border border-gray-200 rounded p-2 mb-4">
-                    @forelse($this->listeTagsThisArticle as $tag)
-                    <span class="flex items-center px-2 py-1 bg-gray-100 text-gray-700 rounded-md" style="font-size: small">
-                        {{ $tag->nom }}
-                        <svg wire:click="deleteTag({{ $tag->id }})" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-500 ml-1 hover:cursor-pointer hover:text-red-700">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </span>
-                    @empty
-                    <p class="text-sm text-blue-500 italic">Cet article ne possède pas de tag.</p>
-                    @endforelse
-                    <input wire:model.debounce.500ms="searchTag" type="text" class="block rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm mt-5 md:mt-0" placeholder="Ajouter un tag">
-                </div>
-
-                @error('tagNom') <small class="text-red-500">{{ $message }}</small> @enderror
-
-                @if (!empty($searchTag))
-                <ul role="list" class="divide-y divide-gray-100 mt-1 sm:max-w-md">
-                    @forelse($this->listeTagsArticle as $tag)
-                    <li class="flex gap-x-4 py-2 pl-2 text-sm text-gray-900 hover:bg-gray-100 hover:cursor-pointer" wire:click="selectTag({{ $tag->id }})">
-                        {{ $tag->nom }}
-                    </li>
-                    @empty
-                    <li class="flex gap-x-4 py-2 pl-2 text-sm text-gray-900 hover:bg-gray-100 hover:cursor-pointer" wire:click="createTag">
-                        {{ $searchTag }}
-                    </li>
-                    @endforelse
-                </ul>
-                @endif
-                <p class="text-sm text-blue-700 mb-2">
-                    @if(session()->has('addTagSuccess'))
-                    {{ session('addTagSuccess') }}
-                    @elseif(session()->has('linkTagSuccess'))
-                    {{ session('linkTagSuccess') }}
-                    @endif
-                </p>
-            </div>
-
+            @if(!$creatingNewUser)
             <div class="pb-5" x-data="{ openScheduleModal: false }">
                 <h2 class="text-sm text-gray-900 font-medium">Options de publication</h2>
 
@@ -177,16 +82,16 @@
                         <fieldset class="mt-3">
                             <div class="space-y-2">
                                 <div class="flex items-center" x-on:click="openScheduleModal = true">
-                                    <input wire:model.defer="articleStatut" id="publier" name="articleStatut" type="radio" value="{{\App\Enums\ArticleStatus::Publier}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="publier" class="ml-3 block text-sm leading-6 text-gray-900">Publié</label>
+                                    <input wire:model.defer="userStatus" id="visitor" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Visitor}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <label for="visitor" class="ml-3 block text-sm leading-6 text-gray-900">Publié</label>
                                 </div>
                                 <div class="flex items-center" x-on:click="openScheduleModal = false">
-                                    <input wire:model.defer="articleStatut" id="depublier" name="articleStatut" type="radio" value="{{\App\Enums\ArticleStatus::Depublier}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="depublier" class="ml-3 block text-sm leading-6 text-gray-900">Dépublié</label>
+                                    <input wire:model.defer="userStatus" id="member" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Member}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <label for="member" class="ml-3 block text-sm leading-6 text-gray-900">Dépublié</label>
                                 </div>
                                 <div class="flex items-center" x-on:click="openScheduleModal = false">
-                                    <input wire:model.defer="articleStatut" id="archiver" name="articleStatut" type="radio" value="{{\App\Enums\ArticleStatus::Archiver}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="archiver" class="ml-3 block text-sm leading-6 text-gray-900">Archivé</label>
+                                    <input wire:model.defer="userStatus" id="admin" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Admin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <label for="admin" class="ml-3 block text-sm leading-6 text-gray-900">Archivé</label>
                                 </div>
                             </div>
                         </fieldset>
@@ -215,7 +120,7 @@
 
                 </div>
                 <div class="relative w-full">
-                    <div wire:ignore x-show="openScheduleModal && {{ $articleStatut }} !== {{ \App\Enums\ArticleStatus::Publier }}" x-transition:enter="transition ease-out duration-100 transform" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75 transform" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="origin-top-right right-0 mt-2 w-full rounded-md shadow-lg">
+                    <div wire:ignore x-show="openScheduleModal && {{ $userStatus }} !== {{ \App\Enums\ArticleStatus::Publier }}" x-transition:enter="transition ease-out duration-100 transform" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75 transform" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="origin-top-right right-0 mt-2 w-full rounded-md shadow-lg">
                         <div class="rounded-md bg-white shadow-xs mb-2">
                             <p class="px-3 text-sm text-gray-900 font-medium py-2">
                                 Programmation de publication
@@ -268,63 +173,7 @@
             @endif
         </div>
     </div>
-    <div x-cloak x-show="openDeleteModal" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div x-show="openDeleteModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div x-show="openDeleteModal" class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-                <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                        <div class="divide-y divide-gray-200 px-4 sm:px-6">
-                            <div class="pt-6 pb-5">
-                                <div>
-                                    <p class="text-sm text-red-500 font-normal mb-2">
-                                        Attention, vous allez supprimer un article.
-                                    </p>
-                                    <p class="text-sm text-red-500 font-medium mb-2">
-                                        Cette action est irréversible !
-                                    </p>
-                                    <p class="text-sm text-gray-900">
-                                        Pour supprimer cet article, veuillez recopier ces caractères à l'identique dans la zone prévue à cet effet :
-                                    </p>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <div class="p-2 border rounded border-blue-500 w-auto">
-                                        {{ $titreArticle }}
-                                    </div>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <input wire:model.defer="copieTitreArticle" type="text" id="copieTitreArticle" placeholder="Recopier le texte ici" class="block w-full text-center rounded border-red-400 shadow-sm focus:border-red-500 focus:ring-red-500">
-                                </div>
-                                @error('copietitre') <small class="text-red-500">{{ $message }}</small> @enderror
-
-                                <div id="alertContainer2" class="mt-1 text-sm text-red-500">
-                                    @if(isset($message))
-                                    {{ $message }}
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2">
-                        <button x-on:click="openDeleteModal = false" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            Annuler
-                        </button>
-
-                        <button wire:loading.remove wire:click="deleteArticle" type="button" class="rounded-md border border-gray-300 bg-red-500 py-2 px-4 text-sm font-medium text-white border-transparent shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            Supprimer
-                        </button>
-                        <button wire:loading.flex wire:target="deleteArticle" type="button" class="rounded-md border border-gray-300 bg-red-500 py-2 px-4 text-sm font-medium text-white border-transparent shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            <svg class="w-6 h-5 animate-spin" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     {{--
                             <div class="space-y-12">
@@ -404,30 +253,6 @@
 </div>
 --}}
 </div>
-
-<script>
-    function updateMessage(message) {
-        let alertContainer2 = document.getElementById('alertContainer2');
-        alertContainer2.innerHTML = message;
-    }
-
-    document.addEventListener('copy', function(e) {
-        e.preventDefault();
-        updateMessage("Copier a été désactivé.");
-    });
-
-    document.addEventListener('cut', function(e) {
-        e.preventDefault();
-        updateMessage("Couper a été désactivé.");
-    });
-
-    document.addEventListener('paste', function(e) {
-        e.preventDefault();
-        updateMessage("Coller a été désactivé.");
-    });
-</script>
-
-
 
 <style>
     #image {

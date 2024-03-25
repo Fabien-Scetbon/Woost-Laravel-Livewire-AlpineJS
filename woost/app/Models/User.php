@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Carbon\Carbon;
+use App\Enums\UserStatus;
 
 class User extends Authenticatable
 {
@@ -54,8 +55,15 @@ class User extends Authenticatable
         return Carbon::parse($date)->translatedFormat('d M Y à H:i');
     }
 
+    // renvoie le nom complet
     public function fullName()
     {
-        return $this->firstname.' '.$this->lastname;
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    // verifie les roles (status)
+    public function hasRole($role)
+    {
+        return UserStatus::getDescription($this->status) === $role;
     }
 }

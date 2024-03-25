@@ -25,7 +25,7 @@ Route::get('register', function () {
     return view('auth.register');
 })->name('register');
 
-Route::prefix('admin')->group(function () {  // ->middleware('access.administration')
+Route::prefix('admin')->group(function () {  // ->middleware('role:admin');
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');

@@ -13,11 +13,11 @@ use Livewire\Component;
 
 class Register extends Component
 {
-    public $firstname ='';
-    public $lastname ='';
-    public $email = '';
-    public $password = '';
-    public $password_confirmation = '';
+    public string $firstname ='';
+    public string $lastname ='';
+    public string $email = '';
+    public string $password = '';
+    public string $password_confirmation = '';
 
     // Message d'erreurs lors de la validation
 
