@@ -113,7 +113,7 @@ class EditUser extends Component
             $this->subTitleUserEditing = "Création d'un nouvel utilisateur";
         } else {
             $this->titleUserEditing = $this->user->fullName();
-            $this->subTitleuserEditing = "Modification de l'utilisateur";
+            $this->subTitleUserEditing = "Modification de l'utilisateur";
         }
     }
 

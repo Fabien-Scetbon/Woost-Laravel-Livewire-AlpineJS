@@ -65,7 +65,7 @@ class Register extends Component
 
         User::create($validatedData);
 
-        $this->reset([ 'firstname', 'lastname', 'email' , 'password', 'password_confirmation']);
+        $this->reset();
         
         session()->flash('message', "Votre compte a été crée avec succès !");
 

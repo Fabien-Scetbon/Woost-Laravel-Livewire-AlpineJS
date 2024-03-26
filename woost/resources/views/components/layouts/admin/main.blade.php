@@ -21,6 +21,10 @@
 
 
     <style>
+        .body__wrapper {
+            height: 100%;
+            background-color: black;
+        }
         .menu-visible {
             max-height: 100px;
             opacity: 1;

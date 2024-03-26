@@ -1,20 +1,81 @@
-<div x-data="{  searchCategorie: '',
-                searchTag: '',
-            }">
+<div>
 
     <div class="flex flex-col justify-start bg-indigo-600 mb-4 px-6 py-2.5 sm:px-3.5 rounded">
         <p class="text-md text-white my-1">{{ $subTitleUserEditing }}</p>
-        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input wire:model.defer="titreArticle" type="text" name="titrearticle" id="titrearticle" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm sm:leading-6" placeholder="Votre titre">
-        </div>
-        @error('titre') <small class="text-red-500">{{ $message }}</small> @enderror
     </div>
 
 
-    <div class="w-full mx-auto" x-data="{openDeleteModal: false}">
+    <div class="w-full mx-auto">
         <div class="md:flex md:gap-5">
             {{-- Coté gauche --}}
             <div class="md:w-3/4 overflow-hidden rounded-lg bg-white shadow p-2">
+
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div class="sm:col-span-2">
+                            <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
+                            <div class="mt-2">
+                                <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+                            <div class="mt-2">
+                                <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                            <div class="mt-2">
+                                <input id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country</label>
+                            <div class="mt-2">
+                                <select id="country" name="country" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>Mexico</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-span-full">
+                            <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
+                            <div class="mt-2">
+                                <input type="text" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2 sm:col-start-1">
+                            <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
+                            <div class="mt-2">
+                                <input type="text" name="city" id="city" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="region" class="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
+                            <div class="mt-2">
+                                <input type="text" name="region" id="region" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
+                            <div class="mt-2">
+                                <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-4">
                     <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Image de l'article</label>
                     @error('image') <small class="text-red-500">{{ $message }}</small> @enderror
@@ -61,121 +122,101 @@
 
                 </div>
 
-                
-        </div>
 
-        {{-- Coté droit --}}
-        <div class="md:w-1/4 overflow-hidden rounded-lg bg-white shadow p-2">
+            </div>
 
-            @if(!$creatingNewUser)
-            <div class="pb-5" x-data="{ openScheduleModal: false }">
-                <h2 class="text-sm text-gray-900 font-medium">Options de publication</h2>
+            {{-- Coté droit --}}
+            <div class="md:w-1/4 overflow-hidden rounded-lg bg-white shadow p-2">
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-8">
-                    <div>
-                        <div class="mt-2">
-                            <p class="text-sm text-gray-700 font-medium pb-1">
-                                Statut de l'article
-                            </p>
+                @if(!$creatingNewUser)
+                <div class="pb-5" x-data="{ openScheduleModal: false }">
+                    <h2 class="text-sm text-gray-900 font-medium">Options de publication</h2>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-8">
+                        <div>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-700 font-medium pb-1">
+                                    Statut de l'article
+                                </p>
+                            </div>
+
+                            <fieldset class="mt-3">
+                                <div class="space-y-2">
+                                    <div class="flex items-center" x-on:click="openScheduleModal = true">
+                                        <input wire:model.defer="userStatus" id="visitor" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Visitor}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        <label for="visitor" class="ml-3 block text-sm leading-6 text-gray-900">Publié</label>
+                                    </div>
+                                    <div class="flex items-center" x-on:click="openScheduleModal = false">
+                                        <input wire:model.defer="userStatus" id="member" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Member}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        <label for="member" class="ml-3 block text-sm leading-6 text-gray-900">Dépublié</label>
+                                    </div>
+                                    <div class="flex items-center" x-on:click="openScheduleModal = false">
+                                        <input wire:model.defer="userStatus" id="admin" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Admin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        <label for="admin" class="ml-3 block text-sm leading-6 text-gray-900">Archivé</label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-900 font-medium pb-1">
+                                    Restrictions
+                                </p>
+
+                            </div>
+
+                            <fieldset class="mt-3">
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <input wire:model.defer="is_ban" id="is_not_ban" name="is_not_ban" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        <label for="is_not_ban" class="ml-3 block text-sm leading-6 text-gray-900">Autoriser</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input wire:model.defer="is_ban" id="is_ban" name="is_ban" type="radio" value="1" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        <label for="is_ban" class="ml-3 block text-sm leading-6 text-gray-900">Bannir</label>
+                                    </div>
+                                </div>
+                            </fieldset>
                         </div>
 
-                        <fieldset class="mt-3">
-                            <div class="space-y-2">
-                                <div class="flex items-center" x-on:click="openScheduleModal = true">
-                                    <input wire:model.defer="userStatus" id="visitor" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Visitor}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="visitor" class="ml-3 block text-sm leading-6 text-gray-900">Publié</label>
-                                </div>
-                                <div class="flex items-center" x-on:click="openScheduleModal = false">
-                                    <input wire:model.defer="userStatus" id="member" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Member}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="member" class="ml-3 block text-sm leading-6 text-gray-900">Dépublié</label>
-                                </div>
-                                <div class="flex items-center" x-on:click="openScheduleModal = false">
-                                    <input wire:model.defer="userStatus" id="admin" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Admin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="admin" class="ml-3 block text-sm leading-6 text-gray-900">Archivé</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div>
-                        <div class="mt-2">
-                            <p class="text-sm text-gray-900 font-medium pb-1">
-                                Autoriser les commentaires
-                            </p>
-
-                        </div>
-
-                        <fieldset class="mt-3">
-                            <div class="space-y-2">
-                                <div class="flex items-center">
-                                    <input wire:model.defer="articleIsCommentable" id="articleIsCommentable" name="articleIsCommentable" type="radio" value="1" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="isCommentable" class="ml-3 block text-sm leading-6 text-gray-900">Autoriser</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input wire:model.defer="articleIsCommentable" id="isNotCommenatble" name="articleIsCommentable" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                    <label for="isNotCommenatble" class="ml-3 block text-sm leading-6 text-gray-900">Ne pas autoriser</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                </div>
-                <div class="relative w-full">
-                    <div wire:ignore x-show="openScheduleModal && {{ $userStatus }} !== {{ \App\Enums\ArticleStatus::Publier }}" x-transition:enter="transition ease-out duration-100 transform" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75 transform" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="origin-top-right right-0 mt-2 w-full rounded-md shadow-lg">
-                        <div class="rounded-md bg-white shadow-xs mb-2">
-                            <p class="px-3 text-sm text-gray-900 font-medium py-2">
-                                Programmation de publication
-                            </p>
-                            <div class="px-3 text-sm text-gray-500 w-90">
-                                <p>Vous pouvez programmer la publication de cet article à une date ultérieure.</p>
-                            </div>
-                            <div class="px-3 mt-2 pb-2">
-                                <label for="dateSchedule" class="block text-sm font-medium text-gray-700">Date
-                                    de publication</label>
-                                <div class="mt-1">
-                                    <input wire:model.defer="articleScheduleAt" type="datetime-local" id="dateSchedule" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                </div>
-                                @error('schedule_at') <small class="text-red-500">{{ $message }}</small> @enderror
-                            </div>
-                        </div>
                     </div>
                 </div>
+                @else
+                <div class="sm:mt-0 md:mt-4 md:mb-4 border-b border-gray-900/10">
+                    <p class="text-sm text-gray-900 font-medium pb-1 mb-1">
+                        Tags et options
+                    </p>
+                    <p class="text-sm text-gray-900 pb-1 mb-1">
+                        Vous pourrez accéder à ces paramètres après la création de votre article.
+                    </p>
+                </div>
+                @endif
             </div>
-            @else
-            <div class="sm:mt-0 md:mt-4 md:mb-4 border-b border-gray-900/10">
-                <p class="text-sm text-gray-900 font-medium pb-1 mb-1">
-                    Tags et options
-                </p>
-                <p class="text-sm text-gray-900 pb-1 mb-1">
-                    Vous pourrez accéder à ces paramètres après la création de votre article.
-                </p>
+        </div>
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+            <div class="sm:w-full md:w-auto">
+                <button wire:click="returnListArticles" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Annuler
+                </button>
+
+                <button wire:loading.remove wire:click="saveArticle" type="button" class="ml-4 basis-1/4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Sauvegarder
+                </button>
+                <button wire:loading.inline wire:target="saveArticle" type="button" class="ml-4 basis-1/4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-11 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <svg class="w-6 h-5 animate-spin" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                </button>
+                @if(!$creatingNewUser)
+                <button x-on:click="openDeleteModal = true" type="button" class="rounded-md border border-gray-300 bg-red-500 py-2 px-4 text-sm font-medium text-white border-transparent shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Supprimer
+                </button>
+                @endif
             </div>
-            @endif
         </div>
-    </div>
-    <div class="mt-6 flex items-center justify-end gap-x-6">
-        <div class="sm:w-full md:w-auto">
-            <button wire:click="returnListArticles" type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Annuler
-            </button>
-
-            <button wire:loading.remove wire:click="saveArticle" type="button" class="ml-4 basis-1/4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Sauvegarder
-            </button>
-            <button wire:loading.inline wire:target="saveArticle" type="button" class="ml-4 basis-1/4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-11 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                <svg class="w-6 h-5 animate-spin" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                </svg>
-            </button>
-            @if(!$creatingNewArticle)
-            <button x-on:click="openDeleteModal = true" type="button" class="rounded-md border border-gray-300 bg-red-500 py-2 px-4 text-sm font-medium text-white border-transparent shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Supprimer
-            </button>
-            @endif
-        </div>
-    </div>
 
 
-    {{--
+        {{--
                             <div class="space-y-12">
                                 <div class="border-b border-gray-900/10 pb-12">
                                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -192,14 +233,14 @@
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <form action="{{ route('storeImageArticleHeader') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    <div class="form-group mt-3">
-        <input type="file" name="image" class="image">
+        @csrf
+        <div class="form-group mt-3">
+            <input type="file" name="image" class="image">
+        </div>
+        <input type="hidden" name="article_id" value="{{ $articleId }}">
+        </form>
     </div>
-    <input type="hidden" name="article_id" value="{{ $articleId }}">
-    </form>
-</div>
-@error('image') <small class="text-red-500">{{ $message }}</small> @enderror
+    @error('image') <small class="text-red-500">{{ $message }}</small> @enderror
 </div>
 
 </div>
