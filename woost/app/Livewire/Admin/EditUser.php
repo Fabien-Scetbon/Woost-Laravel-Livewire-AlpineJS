@@ -44,6 +44,8 @@ class EditUser extends Component
 
     public string $postalcode = '';
 
+    public string $password= '';
+
     public $userStatus;
 
     public bool $is_ban = false;
@@ -100,6 +102,7 @@ class EditUser extends Component
         $this->lastname = $this->user->lastname;
         $this->email = $this->user->email;
         $this->postalcode = $this->user->postalcode;
+        $this->password = '';
         $this->userStatus = $this->user->status;
         $this->is_ban = $this->user->is_ban;
     }

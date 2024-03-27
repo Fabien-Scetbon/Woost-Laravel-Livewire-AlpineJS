@@ -37,7 +37,7 @@ class ManageUsers extends Component
 
     // variable pour delete
 
-    public bool $openDeleteModal = false;
+    public string $userFullName = '';
 
     public $userToDeleteId = null;
 
@@ -93,7 +93,7 @@ class ManageUsers extends Component
     public function setUserToDelete($userID)
     {
         $this->userToDeleteId = $userID;
-        $this->openDeleteModal = true;
+        
     }
 
     public function deleteUser()
