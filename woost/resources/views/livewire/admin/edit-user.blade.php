@@ -10,6 +10,7 @@
                 {{-- Coté gauche --}}
                 <div class="md:w-3/4 overflow-hidden rounded-lg bg-white shadow p-2">
                     <div class="border-b border-gray-900/10 pb-12">
+                        <h3 class="text-base font-semibold leading-7 text-gray-900 mb-5">Informations utilisateur</h3>
                         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                             <div class="sm:col-span-2">
@@ -36,18 +37,18 @@
                                 @error('email') <small class="text-red-500">{{ $message }}</small> @enderror
                             </div>
 
-                            <div class="sm:col-span-2">
+                            <div class="sm:col-span-1">
                                 <label for="postalcode" class="block text-sm font-medium leading-6 text-gray-900">Code postal</label>
                                 <div class="mt-2">
                                     <input wire:model.defer="postalcode" id="postalcode" name="postalcode" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                 </div>
                                 @error('postalcode') <small class="text-red-500">{{ $message }}</small> @enderror
                             </div>
-
                         </div>
                     </div>
+
                     <div class="mb-4">
-                        <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Image de l'article</label>
+                        <label for="cover-photo" class="block text-base font-semibold leading-7 text-gray-900">Photo de profil ou Avatar</label>
                         @error('image') <small class="text-red-500">{{ $message }}</small> @enderror
                         <div class="flex justify-around">
                             <div class="flex flex-col mt-2 w-1/4">
@@ -65,7 +66,7 @@
                                         <p class="text-xs text-gray-500">PNG, JPG & SVG jusqu'à 1MB</p>
                                     </div>
                                 </div>
-                                <p class="text-sm text-gray-700 mt-1 italic">Pour un meilleur affichage, préférez une taille de 1120x700 px</p>
+                                <p class="text-sm text-gray-700 mt-1 italic">Pour un meilleur affichage, préférez un format carré</p>
                             </div>
 
                             <script>
@@ -80,10 +81,10 @@
                                     Chargement de votre image...
                                 </div>
                                 @if ($image)
-                                <img class="max-h-56 w-auto mx-auto" src="{{ $image->temporaryUrl() }}">
+                                    <img class="max-h-56 w-auto mx-auto" src="{{ $image->temporaryUrl() }}">
                                 @else
                                 @if(!$creatingNewUser)
-                                <p class="text-sm text-gray-500 mb-1">Image actuelle</p>
+                                    <p class="text-sm text-gray-500 mb-1">Image actuelle</p>
                                 {{-- <img class="w-80 mx-auto" src="{{ asset('storage/articles/' . $article->image) }}" alt="Image de {{ $article->titre }}"> --}}
                                 @endif
                                 @endif
@@ -100,7 +101,7 @@
 
                     @if(!$creatingNewUser)
                     <div class="pb-5" x-data="{ openScheduleModal: false }">
-                        <h2 class="text-sm text-gray-900 font-medium">Options de publication</h2>
+                        <h2 class="text-sm text-gray-900 font-medium">Options de l'utilisateur</h2>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-8">
                             <div>
