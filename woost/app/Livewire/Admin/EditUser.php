@@ -60,27 +60,27 @@ class EditUser extends Component
 
     // Message d'erreurs lors du validator
 
-    // protected function messages()
-    // {
-    //     return [
-    //         'schedule_at.date' => 'Une date est attendue.',
-    //         'schedule_at.after' => 'La date doit être ultérieure à la date actuelle.',
-    //         'tagNom.required' => 'Le nom est obligatoire.',
-    //         'tagNom.max' => 'Le nom ne doit pas dépasser 20 caractères.',
-    //         'tagNom.unique' => 'Ce nom est déjà utilisé.',
-    //         'titre.required' => 'Le titre est obligatoire.',
-    //         'titre.max' => 'Le titre ne doit pas dépasser 70 caractères.',
-    //         'contenu.required' => 'Le contenu est obligatoire.',
-    //         'copietitre.required' => 'Veuillez recopier le nom de la catégorie',
-    //         'copietitre.in' => 'Les deux noms ne sont pas identiques',
-    //         'image.required' => "L'image est requise.",
-    //         'image.image' => "Votre fichier n'est pas une image.",
-    //         'image.mimes' => "L'extension de votre fichier n'est pas acceptée.",
-    //         'image.max' => 'Votre image dépasse 1MB',
-    //         'categorie_article_id.required' => 'La catégorie est requise.',
+    protected function messages()
+    {
+        return [
+            'schedule_at.date' => 'Une date est attendue.',
+            'schedule_at.after' => 'La date doit être ultérieure à la date actuelle.',
+            'tagNom.required' => 'Le nom est obligatoire.',
+            'tagNom.max' => 'Le nom ne doit pas dépasser 20 caractères.',
+            'tagNom.unique' => 'Ce nom est déjà utilisé.',
+            'titre.required' => 'Le titre est obligatoire.',
+            'titre.max' => 'Le titre ne doit pas dépasser 70 caractères.',
+            'contenu.required' => 'Le contenu est obligatoire.',
+            'copietitre.required' => 'Veuillez recopier le nom de la catégorie',
+            'copietitre.in' => 'Les deux noms ne sont pas identiques',
+            'image.required' => "L'image est requise.",
+            'image.image' => "Votre fichier n'est pas une image.",
+            'image.mimes' => "L'extension de votre fichier n'est pas acceptée.",
+            'image.max' => 'Votre image dépasse 1MB',
+            'categorie_article_id.required' => 'La catégorie est requise.',
 
-    //     ];
-    // }
+        ];
+    }
 
     // Initialisation de la vue
     public function mount()
@@ -121,8 +121,8 @@ class EditUser extends Component
     }
 
 
-    Créer ou updater un article
-    public function saveArticle()
+    // Créer ou updater un user
+    public function saveUser()
     {
         $validatedData = Validator::make(
             [
