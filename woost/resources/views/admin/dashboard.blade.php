@@ -6,7 +6,7 @@
         <div class="p-10">
             <h1 class="text-xl font-semibold text-gray-900 mb-5">Administration</h1>
             <div x-data="{
-                    openBigTab: '1',
+                    openBigTab:{{ session('openBigTab', 1) }},
                     activeTextClasses: 'rounded-l-lg text-indigo-500',
                     inactiveTextClasses: 'text-gray-500 hover:text-gray-700',
                     activeBigTabClasses: 'bg-indigo-500',

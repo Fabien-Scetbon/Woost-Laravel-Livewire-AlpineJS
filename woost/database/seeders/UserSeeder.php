@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
             'status' => '3',
             'is_ban' => '0',
             'password' => Hash::make('ffffffff'),
+            'image' => 'seeder_user.webp',
         ]);
 
         User::factory()

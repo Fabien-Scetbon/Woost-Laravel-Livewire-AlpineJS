@@ -1,8 +1,20 @@
 <div>
     <div x-data="{openDeleteModal: false}">
         <div class="flex flex-col justify-start bg-indigo-600 mb-4 px-6 py-2.5 sm:px-3.5 rounded">
-            <p class="text-md text-white my-1">{{ $subTitleUserEditing }} : {{ $titleUserEditing }}</p>
+            <p class="text-md text-white my-1">{{ $subTitleUserEditing }} {{ $titleUserEditing }}</p>
         </div>
+
+        @if ($errors->has('no_authorization'))
+        <div class="w-1/2 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+                <span class="font-medium">{{ $errors->first('no_authorization') }}</span>
+            </div>
+        </div>
+        @endif
 
         <div class="w-full mx-auto">
             <form wire:submit="saveUser">
@@ -48,11 +60,11 @@
                         </div>
 
                         <div class="mt-5 mb-4">
-                            <label for="cover-photo" class="block text-base font-semibold leading-7 text-gray-900">Photo de profil ou Avatar</label>
+                            <h3 class="block text-base font-semibold leading-7 text-gray-900">Photo de profil ou Avatar</h3>
                             @error('image') <small class="text-red-500">{{ $message }}</small> @enderror
                             <div class="flex justify-around">
                                 <div class="flex flex-col mt-2 w-1/4">
-                                    <div onclick="chooseFile()" id="add_logo_div" wire:click="resetError" class="flex max-w-lg justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 mt-2 cursor-pointer">
+                                    <div onclick="chooseFile()" wire:click="resetError" class="flex max-w-lg justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 mt-2 cursor-pointer">
                                         <div class="space-y-1 text-center">
                                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -81,11 +93,11 @@
                                         Chargement de votre image...
                                     </div>
                                     @if ($image)
-                                    <img class="max-h-56 w-auto mx-auto" src="{{ $image->temporaryUrl() }}">
+                                    <img class="max-h-36 w-auto mx-auto" src="{{ $image->temporaryUrl() }}">
                                     @else
                                     @if(!$creatingNewUser)
                                     <p class="text-sm text-gray-500 mb-1">Image actuelle</p>
-                                    {{-- <img class="w-80 mx-auto" src="{{ asset('storage/articles/' . $article->image) }}" alt="Image de {{ $article->titre }}"> --}}
+                                    <img class="w-36 mx-auto" src="{{ asset('storage/images/users/' . $user->image) }}" alt="Image de {{ $user->fullName() }}">
                                     @endif
                                     @endif
                                 </div>
@@ -104,7 +116,7 @@
                             <div class="mb-5">
                                 <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Nouveau Mot de passe</label>
                                 <div class="mt-2">
-                                    <input wire:model.defer="password" name="password" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                    <input wire:model.defer="password" name="password" id="password" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                 </div>
                                 @error('password') <small class="text-red-500">{{ $message }}</small> @enderror
                             </div>
@@ -146,7 +158,7 @@
                                     <fieldset class="mt-3">
                                         <div class="space-y-2">
                                             <div class="flex items-center">
-                                                <input wire:model.defer="is_ban" id="is_not_ban" name="is_not_ban" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <input wire:model.defer="is_not_ban" id="is_not_ban" name="is_not_ban" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="is_not_ban" class="ml-3 block text-sm leading-6 text-gray-900">Autoriser</label>
                                             </div>
                                             <div class="flex items-center">

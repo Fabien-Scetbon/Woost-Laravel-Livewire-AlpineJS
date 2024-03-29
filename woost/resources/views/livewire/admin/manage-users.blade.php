@@ -15,6 +15,17 @@
                                 </a>
                             </div>
                         </div>
+                        @if(session('message'))
+                        <div class="w-1/2 flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">{{ session('message') }}</span>
+                            </div>
+                        </div>
+                        @endif
                         @if(session()->has('deleteUserSuccess'))
                         <div class="w-1/2 flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
                             <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -123,20 +134,20 @@
                                                 <tr>
                                                     <td class="whitespace-nowrap pl-6 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-56">
-                                                            <input wire:model.live.debounce.500ms="searchUser" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche utilisateur">
+                                                            <input wire:model.live.debounce.500ms="searchUser" name="searchUser" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche utilisateur">
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                                                     </td>
                                                     <td class="whitespace-nowrap pl-6 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-48 mt-4 sm:mt-0">
-                                                            <input wire:model.live.debounce.500ms="searchEmail" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche mail">
+                                                            <input wire:model.live.debounce.500ms="searchEmail" name="searchEmail" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche mail">
 
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap pl-7 py-4 text-sm text-gray-500">
                                                         <div class="md:flex sm:w-48 mt-4 sm:mt-0">
-                                                            <input wire:model.live.debounce.500ms="searchPostalcode" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche code postal">
+                                                            <input wire:model.live.debounce.500ms="searchPostalcode" name="searchPostalcode" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Recherche code postal">
                                                         </div>
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">

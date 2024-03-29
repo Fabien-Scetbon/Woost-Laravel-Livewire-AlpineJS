@@ -32,6 +32,7 @@ class UserFactory extends Factory
             'status' => '2',
             'is_ban' => '0',
             'password' => static::$password ??= Hash::make('password'),
+            'image' => 'seeder_user.webp',
             'remember_token' => Str::random(10),
         ];
     }

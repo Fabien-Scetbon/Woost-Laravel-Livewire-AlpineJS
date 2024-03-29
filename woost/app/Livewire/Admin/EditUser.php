@@ -9,12 +9,15 @@ use App\Enums\UserStatus;
 use BenSampo\Enum\Rules\EnumValue;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
 use Intervention\Image\Facades\Image;
+
 class EditUser extends Component
 {
     use WithFileUploads;
@@ -43,7 +46,7 @@ class EditUser extends Component
 
     public string $postalcode = '';
 
-    public string $password= '';
+    public string $password = '';
 
     public $userStatus;
 
@@ -82,8 +85,7 @@ class EditUser extends Component
     // Initialisation de la vue
     public function mount()
     {
-        if (!isset($this->user))
-        {
+        if (!isset($this->user)) {
             $this->creatingNewUser = true;
         } else {
             $this->creatingNewUser = false;
@@ -109,45 +111,44 @@ class EditUser extends Component
     // Initialisation des titres et sous-titres de la vue en fonction de l'action
     public function initUserTitles(): void
     {
-        if ($this->creatingNewUser)
-        {
-            $this->titleUserEditing = 'Nouvel utilisateur';
+        if ($this->creatingNewUser) {
+            $this->titleUserEditing = '';
             $this->subTitleUserEditing = "Création d'un nouvel utilisateur";
         } else {
             $this->titleUserEditing = $this->user->fullName();
-            $this->subTitleUserEditing = "Modification de l'utilisateur";
+            $this->subTitleUserEditing = "Modification de l'utilisateur :";
         }
     }
 
 
-    // Créer ou updater un article
-    // public function saveArticle()
-    // {
-    //     $validatedData = Validator::make(
-    //         [
-    //             'titre' => $this->titreArticle,
-    //             'user_id' => Auth::user()->id,
-    //             'nom_auteur' => Auth::user()->fullname(),
-    //             'contenu' => $this->form_data[$this->name],
-    //             'categorie_article_id' => $this->articleCategorieId,
-    //             'image' => $this->image,
-    //             'statut' => is_null($this->articleStatut) ? \App\Enums\ArticleStatus::Depublier : intval($this->articleStatut), // contourner le pb de la valeur 0
-    //             'schedule_at' => $this->articleScheduleAt,
-    //             'is_commentable' => $this->articleIsCommentable,
-    //         ],
-    //         [
-    //             'titre' => ['required', 'max:70'],
-    //             'user_id' => ['exists:users,id'],
-    //             'nom_auteur' => ['exists:articles,nom_auteur,user_id,' . Auth::user()->id], //
-    //             'categorie_article_id' => ['required', 'exists:categorie_articles,id'],
-    //             'image' => $this->creatingNewArticle ? ['required', 'image', 'mimes:jpg,png,svg', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
-    //             'contenu' => ['required'],
-    //             'statut' => [new EnumValue(ArticleStatus::class)],
-    //             'schedule_at' => ['nullable', 'date', 'after:now'],
-    //             'is_commentable' => ['boolean'],
+    Créer ou updater un article
+    public function saveArticle()
+    {
+        $validatedData = Validator::make(
+            [
+                'titre' => $this->titreArticle,
+                'user_id' => Auth::user()->id,
+                'nom_auteur' => Auth::user()->fullname(),
+                'contenu' => $this->form_data[$this->name],
+                'categorie_article_id' => $this->articleCategorieId,
+                'image' => $this->image,
+                'statut' => is_null($this->articleStatut) ? \App\Enums\ArticleStatus::Depublier : intval($this->articleStatut), // contourner le pb de la valeur 0
+                'schedule_at' => $this->articleScheduleAt,
+                'is_commentable' => $this->articleIsCommentable,
+            ],
+            [
+                'titre' => ['required', 'max:70'],
+                'user_id' => ['exists:users,id'],
+                'nom_auteur' => ['exists:articles,nom_auteur,user_id,' . Auth::user()->id], //
+                'categorie_article_id' => ['required', 'exists:categorie_articles,id'],
+                'image' => $this->creatingNewArticle ? ['required', 'image', 'mimes:jpg,png,svg', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
+                'contenu' => ['required'],
+                'statut' => [new EnumValue(ArticleStatus::class)],
+                'schedule_at' => ['nullable', 'date', 'after:now'],
+                'is_commentable' => ['boolean'],
 
-    //         ], $this->messages()
-    //     )->validate();
+            ], $this->messages()
+        )->validate();
 
     //     // Capitalize le nom avant de le stocker
     //     $validatedData['titre'] = Str::ucfirst($validatedData['titre']);
@@ -192,7 +193,7 @@ class EditUser extends Component
     //         session()->flash('openBigTab', 2);
     //         redirect()->route('admin.gestion_articles')->with('message', 'Les modifications apportées à cet article ont été mises à jour.');
     //     }
-    // }
+    }
 
     // public function manageImage()
     // {
@@ -216,39 +217,29 @@ class EditUser extends Component
     //     return $image_name.'.webp';
     // }
 
-    // SOFT DELETE
-    // public function deleteArticle()
-    // {
-    //     Validator::make(
-    //         [
-    //             'copietitre' => $this->copieTitreArticle,
-    //         ],
-    //         [
-    //             'copietitre' => ['required', Rule::in([$this->titreArticle])],
-    //         ], $this->messages()
-    //     )->validate();
+    public function deleteUser()
+    {
+        if (Auth::user() && Auth::user()->hasRole('Admin')) { // Pb VSC qui n'associe pas Auth::user() a la classe User
+            $this->user->delete();
 
-    //     $this->article->delete();
-    //     $this->reset(['copieTitreArticle']);
+            // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
+            redirect()->route('admin.dashboard')->with('message', "L'utilisateur a bien été supprimé.");
+        } else {
+            throw ValidationException::withMessages([
+                'no_authorization' => "Vous n'êtes pas autorisé à supprimer des utilisateurs.",
+            ]);
+        }
+    }
 
-    //     // Déclenchez un événement pour indiquer la suppression d'un article au component gestion-commentaires pour actualiser la liste des commentaires
-    //     $this->emit('articleSupprime');
+    // Redirige vers la vue liste users si edit annulé
+    public function returnListUsers(): void
+    {
+        // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
+        redirect()->route('admin.dashboard');
+    }
 
-    //     session()->flash('openBigTab', 2);
-    //     redirect()->route('admin.gestion_articles')->with('message', "L'article a bien été supprimé.");
-    // }
-
-    // // Redirige vers la vue liste articles si edit annulé
-    // public function returnListArticles() :void
-    // {
-    //     session()->flash('openBigTab', 2);
-    //     redirect()->route('admin.gestion_articles');
-    // }
-
-    // public function resetError()
-    // {
-    //     $this->resetErrorBag('image');
-    // }
+    public function resetError()
+    {
+        $this->resetErrorBag('image');
+    }
 }
-
-

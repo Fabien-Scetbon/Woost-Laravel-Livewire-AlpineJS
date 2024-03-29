@@ -10,7 +10,6 @@ use Livewire\WithPagination;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
-use App\Enums\UserStatus;
 
 class ManageUsers extends Component
 

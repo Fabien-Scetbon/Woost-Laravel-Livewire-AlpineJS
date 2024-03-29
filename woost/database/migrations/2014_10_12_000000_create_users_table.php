@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedTinyInteger('status')->default(\App\Enums\UserStatus::Member);
             $table->boolean('is_ban')->default(false);
+            $table->string('image');
             $table->rememberToken();
             $table->timestamps();
         });
