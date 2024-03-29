@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin;
 
-
 use App\Models\User;
 
 use Livewire\Component;
