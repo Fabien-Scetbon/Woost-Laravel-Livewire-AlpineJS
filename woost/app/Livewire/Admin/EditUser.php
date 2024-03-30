@@ -10,6 +10,7 @@ use BenSampo\Enum\Rules\EnumValue;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -63,22 +64,17 @@ class EditUser extends Component
     protected function messages()
     {
         return [
-            'schedule_at.date' => 'Une date est attendue.',
-            'schedule_at.after' => 'La date doit être ultérieure à la date actuelle.',
-            'tagNom.required' => 'Le nom est obligatoire.',
-            'tagNom.max' => 'Le nom ne doit pas dépasser 20 caractères.',
-            'tagNom.unique' => 'Ce nom est déjà utilisé.',
-            'titre.required' => 'Le titre est obligatoire.',
-            'titre.max' => 'Le titre ne doit pas dépasser 70 caractères.',
-            'contenu.required' => 'Le contenu est obligatoire.',
-            'copietitre.required' => 'Veuillez recopier le nom de la catégorie',
-            'copietitre.in' => 'Les deux noms ne sont pas identiques',
+            'firstname.required' => 'Le prénom est obligatoire.',
+            'lastname.required' => 'Le nom est obligatoire.',
+            'email.required' => "L'adresse mail est obligatoire.",
+            'email.email' => 'Veuillez entrer une adresse mail valide.',
+            'email.unique' => 'Cette adresse mail existe déjà.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
             'image.required' => "L'image est requise.",
             'image.image' => "Votre fichier n'est pas une image.",
             'image.mimes' => "L'extension de votre fichier n'est pas acceptée.",
             'image.max' => 'Votre image dépasse 1MB',
-            'categorie_article_id.required' => 'La catégorie est requise.',
-
         ];
     }
 
@@ -126,28 +122,23 @@ class EditUser extends Component
     {
         $validatedData = Validator::make(
             [
-                'titre' => $this->titreArticle,
-                'user_id' => Auth::user()->id,
-                'nom_auteur' => Auth::user()->fullname(),
-                'contenu' => $this->form_data[$this->name],
-                'categorie_article_id' => $this->articleCategorieId,
-                'image' => $this->image,
-                'statut' => is_null($this->articleStatut) ? \App\Enums\ArticleStatus::Depublier : intval($this->articleStatut), // contourner le pb de la valeur 0
-                'schedule_at' => $this->articleScheduleAt,
-                'is_commentable' => $this->articleIsCommentable,
+                'firstname' => $this->firstname,
+                'lastname' => $this->lastname,
+                'email' => $this->email,
+                'postalcode' => $this->postalcode,
+                'password' => $this->password,
+                'status' => $this->status,
+                'is_ban' => $this->is_ban
             ],
             [
-                'titre' => ['required', 'max:70'],
-                'user_id' => ['exists:users,id'],
-                'nom_auteur' => ['exists:articles,nom_auteur,user_id,' . Auth::user()->id], //
-                'categorie_article_id' => ['required', 'exists:categorie_articles,id'],
-                'image' => $this->creatingNewArticle ? ['required', 'image', 'mimes:jpg,png,svg', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
-                'contenu' => ['required'],
-                'statut' => [new EnumValue(ArticleStatus::class)],
-                'schedule_at' => ['nullable', 'date', 'after:now'],
-                'is_commentable' => ['boolean'],
+                'firstname' => ['required'],
+                'lastname' => ['required'],
+                'email' => ['required', 'email','unique:users'],
+                'postalcode' => ['required'],
 
-            ], $this->messages()
+                'password' => ['required', Password::min(8)],
+            ],
+            $this->messages()
         )->validate();
 
     //     // Capitalize le nom avant de le stocker
