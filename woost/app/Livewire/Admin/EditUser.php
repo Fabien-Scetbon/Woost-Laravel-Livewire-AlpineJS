@@ -7,15 +7,15 @@ use App\Models\User;
 use Livewire\Component;
 use App\Enums\UserStatus;
 use BenSampo\Enum\Rules\EnumValue;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
 use Intervention\Image\Facades\Image;
 
@@ -47,9 +47,11 @@ class EditUser extends Component
 
     public string $postalcode = '';
 
+    public string $city = '';
+
     public string $password = '';
 
-    public $userStatus;
+    public $status = \App\Enums\UserStatus::Member;
 
     public bool $is_ban = false;
 
@@ -69,6 +71,7 @@ class EditUser extends Component
             'email.required' => "L'adresse mail est obligatoire.",
             'email.email' => 'Veuillez entrer une adresse mail valide.',
             'email.unique' => 'Cette adresse mail existe déjà.',
+            'postalcode.required' => 'Le code postal est obligatoire',
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
             'image.required' => "L'image est requise.",
@@ -100,7 +103,7 @@ class EditUser extends Component
         $this->email = $this->user->email;
         $this->postalcode = $this->user->postalcode;
         $this->password = '';
-        $this->userStatus = $this->user->status;
+        $this->status = $this->user->status;
         $this->is_ban = $this->user->is_ban;
     }
 
@@ -120,100 +123,115 @@ class EditUser extends Component
     // Créer ou updater un user
     public function saveUser()
     {
-        $validatedData = Validator::make(
-            [
-                'firstname' => $this->firstname,
-                'lastname' => $this->lastname,
-                'email' => $this->email,
-                'postalcode' => $this->postalcode,
-                'password' => $this->password,
-                'status' => $this->status,
-                'is_ban' => $this->is_ban
-            ],
-            [
-                'firstname' => ['required'],
-                'lastname' => ['required'],
-                'email' => ['required', 'email','unique:users'],
-                'postalcode' => ['required'],
+        if (Auth::user() && Auth::user()->hasRole('Admin')) {
+            // if (Auth::user() && Auth::user()->hasRole('Admin')) { // Pb VSC qui n'associe pas Auth::user() a la classe User
+            // dd($this->status);
+            $validatedData = Validator::make(
+                [
+                    'firstname' => $this->firstname,
+                    'lastname' => $this->lastname,
+                    'email' => $this->email,
+                    'postalcode' => $this->postalcode,
+                    'password' => $this->password,
+                    'status' => intval($this->status),
+                    'is_ban' => $this->is_ban,
+                    'image' => $this->image,
+                ],
+                [
+                    'firstname' => ['required'],
+                    'lastname' => ['required'],
+                    'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id ?? null)],
+                    'postalcode' => ['required'],
+                    'password' => $this->creatingNewUser ? ['required', Password::min(8)] : ['nullable'],
+                    'status' => [new EnumValue(UserStatus::class)],
+                    'is_ban' => ['boolean'],
+                    'image' => $this->creatingNewUser ? ['required', 'image', 'mimes:jpg,png,svg', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
 
-                'password' => ['required', Password::min(8)],
-            ],
-            $this->messages()
-        )->validate();
+                ],
+                $this->messages()
+            )->validate();
 
-    //     // Capitalize le nom avant de le stocker
-    //     $validatedData['titre'] = Str::ucfirst($validatedData['titre']);
+            // Capitalize avant de stocker
+            foreach (['firstname', 'lastname'] as $val) {
+                $validatedData[$val] = Str::ucfirst($validatedData[$val]);
+            }
 
-    //     if ($this->creatingNewArticle)  // on cree un nouvel article
-    //     {
-    //         $validatedData['image'] = $this->manageImage();
+            if ($this->creatingNewUser)  // on cree un nouveau user
+            {
+                $validatedData['image'] = $this->manageImage();
 
-    //         Article::create($validatedData);
+                $validatedData['password'] = Hash::make($this->password);
 
-    //         session()->flash('openBigTab', 2);
-    //         redirect()->route('admin.gestion_articles')->with('message', 'Votre nouvel article a bien été crée.');
+                User::create($validatedData);
 
-    //     } else {   // On update un article existant
+                // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
+                redirect()->route('admin.dashbord')->with('message', 'Votre nouvel utilisateur a bien été créé.');
+            } else {   // On update un user existant
 
-    //         if($validatedData['schedule_at'] == null) // On vérifie si la publication n'est pas programmée à une date ultérieure
-    //         {
-    //             // On vérifie si le statut de l'article passe a Publié pour initialiser le champ 'published_at' et envoyer éventuellement (1ere publi) les emails d'abonnement
-    //             if($this->article->statut != \App\Enums\ArticleStatus::Publier && $validatedData['statut'] == \App\Enums\ArticleStatus::Publier)
-    //             {
-    //                 $validatedData['published_at'] = Carbon::now();
+                // On vérifie si le user a changer son image
+                isset($this->image) ? $validatedData['image'] = $this->manageImage() : $validatedData['image'] = $this->user->image;
 
-    //                 if(is_null($this->article->published_at)) // 1ere publication
-    //                 {
-    //                     $categorieStatut = CategorieArticle::find($this->articleCategorieId)->statut;
+                $this->user->update($validatedData);
 
-    //                     if($categorieStatut == \App\Enums\ArticleStatus::Publier) // La catégorie de l'article a le statut Publier
-    //                     {
-    //                         $articleService = new ArticleService();
-    //                         $articleService->sendNewArticleNotification($this->articleCategorieId);
-    //                     }
-    //                 }
-    //             }
-    //         } else { // Si la publication est programmée à une date ultérieure, on ne change pas le statut de l'article
-    //             $validatedData['statut'] = $this->article->statut;
-    //         }
-
-    //         // On vérifie si le user a changer son image
-    //         isset($this->image) ? $validatedData['image'] = $this->manageImage() : $validatedData['image'] = $this->article->image;
-
-    //         $this->article->update($validatedData);
-    //         session()->flash('openBigTab', 2);
-    //         redirect()->route('admin.gestion_articles')->with('message', 'Les modifications apportées à cet article ont été mises à jour.');
-    //     }
+                redirect()->route('admin.dashboard')->with('message', 'Les modifications apportées à cet utilisateur ont été mises à jour.');
+            }
+        } else {
+            throw ValidationException::withMessages([
+                'no_authorization' => "Vous n'êtes pas autorisé à modifier ou ajouter des utilisateurs.",
+            ]);
+        }
     }
 
-    // public function manageImage()
-    // {
-    //     if(!$this->creatingNewArticle)
-    //     {
-    //         // Si l'article existe, on supprime l'image actuelle et on utilise son article_id dans le nom de l'image
-    //         Storage::disk('public')->delete('articles/'.$this->article->image);
-    //         $image_name = $this->article->id.'_'.Str::random();
+    public function searchCityByPostalCode()
+    {
+        // Envoyer une requête à l'API avec le code postal
+        $response = Http::get('https://geo.api.gouv.fr/communes', [
+            'codePostal' => $this->postalcode,
+        ]);
 
-    //     } else {
-    //         // Si l'article n'existe pas
-    //         $image_name = Str::random();
-    //     }
+        // Vérifier si la requête a réussi
+        if ($response->successful()) {
+            // Analyser la réponse JSON
+            $city = $response->json();
+            
+            // Récupérer le nom de la première ville de la réponse (ou de toute autre façon appropriée)
+            if (!empty($city)) {
+                $this->city = $city[0]['nom'];
+            } else {
+                $this->city = 'Ville non trouvée';
+            }
+        } else {
+            // Gérer les erreurs de requête
+            $this->city = 'Erreur lors de la recherche de la ville';
+        }
+    }
 
-    //     // Intervention Image pour resize et encode en webp
-    //     $image = Image::make($this->image);
-    //     // $image->resize(1120,700);   suivant les besoins avant cropperjs
-    //     $image->encode('webp');
-    //     $image->save(public_path('storage/articles/'.$image_name.'.webp'));
+    public function manageImage()
+    {
+        if (!$this->creatingNewUser) {
 
-    //     return $image_name.'.webp';
-    // }
+            // Si l'utilisateur existe, on supprime l'image actuelle et on utilise son user_id dans le nom de l'image
+            // Storage::disk('public')->delete('images/users/' . $this->user->image);
+            $image_name = $this->user->id . '_' . Str::random();
+        } else {
+
+            // Si l'utilisateur n'existe pas
+            $image_name = '00-' . Str::random();
+        }
+
+        // Intervention Image pour encoder en webp
+        $image = Image::make($this->image);
+        $image->encode('webp');
+        $image->save(public_path('storage/images/users/' . $image_name . '.webp'));
+
+        return $image_name . '.webp';
+    }
 
     public function deleteUser()
     {
         if (Auth::user() && Auth::user()->hasRole('Admin')) { // Pb VSC qui n'associe pas Auth::user() a la classe User
             $this->user->delete();
 
-            // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
             redirect()->route('admin.dashboard')->with('message', "L'utilisateur a bien été supprimé.");
         } else {
             throw ValidationException::withMessages([

@@ -52,9 +52,16 @@
                                 <div class="sm:col-span-1">
                                     <label for="postalcode" class="block text-sm font-medium leading-6 text-gray-900">Code postal</label>
                                     <div class="mt-2">
-                                        <input wire:model.defer="postalcode" id="postalcode" name="postalcode" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        <input wire:model="postalcode" wire:keydown.debounce.500ms="searchCityByPostalCode" id="postalcode" name="postalcode" type="text" class="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                     </div>
                                     @error('postalcode') <small class="text-red-500">{{ $message }}</small> @enderror
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                    <p class="block text-sm font-medium leading-6 text-gray-900">Ville</p>
+                                    <div class="mt-2">
+                                        <p wire:model="city" class="block w-full rounded-md border-0 h-9 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300">{{ $city }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -135,18 +142,20 @@
                                     <fieldset class="mt-3">
                                         <div class="space-y-2">
                                             <div class="flex items-center">
-                                                <input wire:model.defer="userStatus" id="visitor" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Visitor}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <input wire:model.defer="status" id="visitor" name="status" type="radio" value="{{\App\Enums\UserStatus::Visitor}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="visitor" class="ml-3 block text-sm leading-6 text-gray-900">Visiteur</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input wire:model.defer="userStatus" id="member" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Member}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <input wire:model.defer="status" id="member" name="status" type="radio" value="{{\App\Enums\UserStatus::Member}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="member" class="ml-3 block text-sm leading-6 text-gray-900">Membre</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input wire:model.defer="userStatus" id="admin" name="userStatus" type="radio" value="{{\App\Enums\UserStatus::Admin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <input wire:model.defer="status" id="admin" name="status" type="radio" value="{{\App\Enums\UserStatus::Admin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="admin" class="ml-3 block text-sm leading-6 text-gray-900">Admin</label>
                                             </div>
                                         </div>
+                                        @error('status') <small class="text-red-500">{{ $message }}</small> @enderror
+
                                     </fieldset>
                                 </div>
                                 <div>
@@ -160,7 +169,7 @@
                                     <fieldset class="mt-3">
                                         <div class="space-y-2">
                                             <div class="flex items-center">
-                                                <input wire:model.defer="is_not_ban" id="is_not_ban" name="is_not_ban" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <input wire:model.defer="is_ban" id="is_not_ban" name="is_not_ban" type="radio" value="0" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="is_not_ban" class="ml-3 block text-sm leading-6 text-gray-900">Autoriser</label>
                                             </div>
                                             <div class="flex items-center">
