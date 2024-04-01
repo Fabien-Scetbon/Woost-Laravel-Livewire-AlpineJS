@@ -49,6 +49,12 @@ class EditUser extends Component
 
     public string $city = '';
 
+    public string $city_lat = '';
+
+    public string $city_long = '';
+
+    public string $department = '';
+
     public string $password = '';
 
     public $status = \App\Enums\UserStatus::Member;
@@ -124,8 +130,7 @@ class EditUser extends Component
     public function saveUser()
     {
         if (Auth::user() && Auth::user()->hasRole('Admin')) {
-            // if (Auth::user() && Auth::user()->hasRole('Admin')) { // Pb VSC qui n'associe pas Auth::user() a la classe User
-            // dd($this->status);
+
             $validatedData = Validator::make(
                 [
                     'firstname' => $this->firstname,
@@ -159,17 +164,27 @@ class EditUser extends Component
             if ($this->creatingNewUser)  // on cree un nouveau user
             {
                 $validatedData['image'] = $this->manageImage();
-
                 $validatedData['password'] = Hash::make($this->password);
+                $validatedData['city'] = $this->city;
+                $validatedData['department'] = $this->department;
+                $validatedData['city_lat'] = $this->city_lat;
+                $validatedData['city_long'] = $this->city_long;
+
 
                 User::create($validatedData);
 
                 // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
                 redirect()->route('admin.dashbord')->with('message', 'Votre nouvel utilisateur a bien été créé.');
+            
             } else {   // On update un user existant
 
                 // On vérifie si le user a changer son image
                 isset($this->image) ? $validatedData['image'] = $this->manageImage() : $validatedData['image'] = $this->user->image;
+                $validatedData['password'] = Hash::make($this->password);
+                $validatedData['city'] = $this->city;
+                $validatedData['department'] = $this->department;
+                $validatedData['city_lat'] = $this->city_lat;
+                $validatedData['city_long'] = $this->city_long;
 
                 $this->user->update($validatedData);
 
@@ -184,25 +199,34 @@ class EditUser extends Component
 
     public function searchCityByPostalCode()
     {
-        // Envoyer une requête à l'API avec le code postal
-        $response = Http::get('https://geo.api.gouv.fr/communes', [
-            'codePostal' => $this->postalcode,
-        ]);
+        if (strlen($this->postalcode) >= 5) {
 
-        // Vérifier si la requête a réussi
-        if ($response->successful()) {
-            // Analyser la réponse JSON
-            $city = $response->json();
-            
-            // Récupérer le nom de la première ville de la réponse (ou de toute autre façon appropriée)
-            if (!empty($city)) {
-                $this->city = $city[0]['nom'];
+            // Envoyer une requête à l'API avec le code postal
+            $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json', [
+                'address' => $this->postalcode,
+                'region' => 'fr',
+                'components' => 'country:FR',
+                'key' => env('GOOGLE_MAPS_API_KEY'),
+            ]);
+
+            $data = $response->json();
+
+            if ($data['status'] === 'OK') {
+                // dd($data);
+                if (isset($data['results']) && !array_key_exists('partial_match', $data['results'][0])) {
+
+                    $this->city = $data['results'][0]['address_components'][1]['long_name'];
+                    $this->department = $data['results'][0]['address_components'][2]['long_name'];
+                    $this->city_lat = $data['results'][0]['geometry']['location']['lat'];
+                    $this->city_long = $data['results'][0]['geometry']['location']['lng'];
+
+                } else {
+                    $this->city = 'Code postal invalide';
+                    $this->reset(['department']);
+                }
             } else {
-                $this->city = 'Ville non trouvée';
+                $this->city = 'Erreur de chargement';
             }
-        } else {
-            // Gérer les erreurs de requête
-            $this->city = 'Erreur lors de la recherche de la ville';
         }
     }
 
