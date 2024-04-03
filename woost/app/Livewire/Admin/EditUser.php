@@ -6,6 +6,8 @@ use App\Models\User;
 
 use Livewire\Component;
 use App\Enums\UserStatus;
+use App\Services\GoogleMapService;
+use App\Rules\ValidPostalCode;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
@@ -77,13 +79,12 @@ class EditUser extends Component
             'email.required' => "L'adresse mail est obligatoire.",
             'email.email' => 'Veuillez entrer une adresse mail valide.',
             'email.unique' => 'Cette adresse mail existe déjà.',
-            'postalcode.required' => 'Le code postal est obligatoire',
+            'postalcode.required' => 'Le code postal est obligatoire.',
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
-            'image.required' => "L'image est requise.",
             'image.image' => "Votre fichier n'est pas une image.",
             'image.mimes' => "L'extension de votre fichier n'est pas acceptée.",
-            'image.max' => 'Votre image dépasse 1MB',
+            'image.max' => 'Votre image dépasse 1MB.',
         ];
     }
 
@@ -143,35 +144,35 @@ class EditUser extends Component
                     'image' => $this->image,
                 ],
                 [
-                    'firstname' => ['required'],
-                    'lastname' => ['required'],
-                    'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id ?? null)],
-                    'postalcode' => ['required'],
-                    'password' => $this->creatingNewUser ? ['required', Password::min(8)] : ['nullable'],
-                    'status' => [new EnumValue(UserStatus::class)],
-                    'is_ban' => ['boolean'],
-                    'image' => $this->creatingNewUser ? ['required', 'image', 'mimes:jpg,png,svg', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
+                    // 'firstname' => ['required'],
+                    // 'lastname' => ['required'],
+                    // 'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id ?? null)],
+                    // 'postalcode' => ['required', new ValidPostalCode],
+                    // 'password' => $this->creatingNewUser ? ['required', Password::min(8)] : ['nullable'],
+                    // 'status' => [new EnumValue(UserStatus::class)],
+                    // 'is_ban' => ['boolean'],
+                    'image' => $this->creatingNewUser ? ['image', 'mimes:jpg,png,svg,webp', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
 
                 ],
                 $this->messages()
             )->validate();
 
             // Capitalize avant de stocker
-            foreach (['firstname', 'lastname'] as $val) {
-                $validatedData[$val] = Str::ucfirst($validatedData[$val]);
-            }
+            // foreach (['firstname', 'lastname'] as $val) {
+            //     $validatedData[$val] = Str::ucfirst($validatedData[$val]);
+            // }
 
             if ($this->creatingNewUser)  // on cree un nouveau user
             {
                 $validatedData['image'] = $this->manageImage();
-                $validatedData['password'] = Hash::make($this->password);
-                $validatedData['city'] = $this->city;
-                $validatedData['department'] = $this->department;
-                $validatedData['city_lat'] = $this->city_lat;
-                $validatedData['city_long'] = $this->city_long;
+                // $validatedData['password'] = Hash::make($this->password);
+                // $validatedData['city'] = $this->city;
+                // $validatedData['department'] = $this->department;
+                // $validatedData['city_lat'] = $this->city_lat;
+                // $validatedData['city_long'] = $this->city_long;
 
 
-                User::create($validatedData);
+                // User::create($validatedData);
 
                 // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
                 redirect()->route('admin.dashbord')->with('message', 'Votre nouvel utilisateur a bien été créé.');
@@ -201,31 +202,17 @@ class EditUser extends Component
     {
         if (strlen($this->postalcode) >= 5) {
 
-            // Envoyer une requête à l'API avec le code postal
-            $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json', [
-                'address' => $this->postalcode,
-                'region' => 'fr',
-                'components' => 'country:FR',
-                'key' => env('GOOGLE_MAPS_API_KEY'),
-            ]);
+            $service = new GoogleMapService();
+            $result = $service->searchCityByPostalCode($this->postalcode);
 
-            $data = $response->json();
-
-            if ($data['status'] === 'OK') {
-                // dd($data);
-                if (isset($data['results']) && !array_key_exists('partial_match', $data['results'][0])) {
-
-                    $this->city = $data['results'][0]['address_components'][1]['long_name'];
-                    $this->department = $data['results'][0]['address_components'][2]['long_name'];
-                    $this->city_lat = $data['results'][0]['geometry']['location']['lat'];
-                    $this->city_long = $data['results'][0]['geometry']['location']['lng'];
-
-                } else {
-                    $this->city = 'Code postal invalide';
-                    $this->reset(['department']);
-                }
+            if (isset($result['error'])) {
+                $this->city = $result['error'];
+                $this->reset(['department', 'city_lat', 'city_long']);
             } else {
-                $this->city = 'Erreur de chargement';
+                $this->city = $result['city'];
+                $this->department = $result['department'];
+                $this->city_lat = $result['city_lat'];
+                $this->city_long = $result['city_long'];
             }
         }
     }

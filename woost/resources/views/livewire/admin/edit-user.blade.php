@@ -109,10 +109,14 @@
                                     @if ($image)
                                     <img class="max-h-36 w-auto mx-auto" src="{{ $image->temporaryUrl() }}">
                                     @else
-                                    @if(!$creatingNewUser)
-                                    <p class="text-sm text-gray-500 mb-1">Image actuelle</p>
-                                    <img class="w-36 mx-auto" src="{{ asset('storage/images/users/' . $user->image) }}" alt="Image de {{ $user->fullName() }}">
-                                    @endif
+                                        @if(!$creatingNewUser)
+                                            <p class="text-sm text-gray-500 mb-1">Image actuelle</p>
+                                            <img class="w-36 mx-auto" src="{{ asset('storage/images/users/' . $user->image) }}" alt="Image de {{ $user->fullName() }}">
+                                        @else
+                                        <p class="text-sm text-gray-500 mb-1">Image par défaut</p>
+                                        <img class="w-36 mx-auto" src="{{ asset('storage/images/users/defaultuser.webp') }}" alt="Image par défaut">
+
+                                        @endif
                                     @endif
                                 </div>
                             </div>
