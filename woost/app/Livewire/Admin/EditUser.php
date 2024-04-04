@@ -144,39 +144,38 @@ class EditUser extends Component
                     'image' => $this->image,
                 ],
                 [
-                    // 'firstname' => ['required'],
-                    // 'lastname' => ['required'],
-                    // 'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id ?? null)],
-                    // 'postalcode' => ['required', new ValidPostalCode],
-                    // 'password' => $this->creatingNewUser ? ['required', Password::min(8)] : ['nullable'],
-                    // 'status' => [new EnumValue(UserStatus::class)],
-                    // 'is_ban' => ['boolean'],
-                    'image' => $this->creatingNewUser ? ['image', 'mimes:jpg,png,svg,webp', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
+                    'firstname' => ['required'],
+                    'lastname' => ['required'],
+                    'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id ?? null)],
+                    'postalcode' => ['required', new ValidPostalCode],
+                    'password' => $this->creatingNewUser ? ['required', Password::min(8)] : ['nullable'],
+                    'status' => [new EnumValue(UserStatus::class)],
+                    'is_ban' => ['boolean'],
+                    'image' => $this->creatingNewUser ? ['nullable', 'image', 'mimes:jpg,png,svg,webp', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
 
                 ],
                 $this->messages()
             )->validate();
 
             // Capitalize avant de stocker
-            // foreach (['firstname', 'lastname'] as $val) {
-            //     $validatedData[$val] = Str::ucfirst($validatedData[$val]);
-            // }
+            foreach (['firstname', 'lastname'] as $val) {
+                $validatedData[$val] = Str::ucfirst($validatedData[$val]);
+            }
 
             if ($this->creatingNewUser)  // on cree un nouveau user
             {
                 $validatedData['image'] = $this->manageImage();
-                // $validatedData['password'] = Hash::make($this->password);
-                // $validatedData['city'] = $this->city;
-                // $validatedData['department'] = $this->department;
-                // $validatedData['city_lat'] = $this->city_lat;
-                // $validatedData['city_long'] = $this->city_long;
+                $validatedData['password'] = Hash::make($this->password);
+                $validatedData['city'] = $this->city;
+                $validatedData['department'] = $this->department;
+                $validatedData['city_lat'] = $this->city_lat;
+                $validatedData['city_long'] = $this->city_long;
 
 
-                // User::create($validatedData);
+                User::create($validatedData);
 
                 // session()->flash('openBigTab', 1 );  1 par défaut dans dashboard
-                redirect()->route('admin.dashbord')->with('message', 'Votre nouvel utilisateur a bien été créé.');
-            
+                redirect()->route('admin.dashboard')->with('message', 'Votre nouvel utilisateur a bien été créé.');
             } else {   // On update un user existant
 
                 // On vérifie si le user a changer son image
@@ -221,19 +220,25 @@ class EditUser extends Component
     {
         if (!$this->creatingNewUser) {
 
-            // Si l'utilisateur existe, on supprime l'image actuelle et on utilise son user_id dans le nom de l'image
-            // Storage::disk('public')->delete('images/users/' . $this->user->image);
+            // Si l'utilisateur existe, on supprime l'image actuelle (sauf default image) et on utilise son user_id dans le nom de l'image
+            if ($this->user->image != 'defaultuser.webp') {
+                Storage::disk('public')->delete('images/users/' . $this->user->image);
+            }
             $image_name = $this->user->id . '_' . Str::random();
         } else {
-
-            // Si l'utilisateur n'existe pas
-            $image_name = '00-' . Str::random();
+            
+            if (isset($this->image)) {
+                // Si l'utilisateur n'existe pas
+                $image_name = '00-' . Str::random();
+            }
         }
+        if (isset($this->image)) {
 
-        // Intervention Image pour encoder en webp
-        $image = Image::make($this->image);
-        $image->encode('webp');
-        $image->save(public_path('storage/images/users/' . $image_name . '.webp'));
+            // Intervention Image pour encoder en webp
+            $image = Image::make($this->image);
+            $image->encode('webp');
+            $image->save(public_path('storage/images/users/' . $image_name . '.webp'));
+        }
 
         return $image_name . '.webp';
     }

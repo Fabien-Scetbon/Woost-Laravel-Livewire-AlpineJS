@@ -114,7 +114,7 @@
                                             <img class="w-36 mx-auto" src="{{ asset('storage/images/users/' . $user->image) }}" alt="Image de {{ $user->fullName() }}">
                                         @else
                                         <p class="text-sm text-gray-500 mb-1">Image par défaut</p>
-                                        <img class="w-36 mx-auto" src="{{ asset('storage/images/users/defaultuser.webp') }}" alt="Image par défaut">
+                                        <img class="w-36 mx-auto" src="{{ asset('storage/images/users/seeder/defaultuser.webp') }}" alt="Image par défaut">
 
                                         @endif
                                     @endif
