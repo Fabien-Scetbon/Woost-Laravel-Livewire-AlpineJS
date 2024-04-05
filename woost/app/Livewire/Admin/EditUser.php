@@ -63,8 +63,6 @@ class EditUser extends Component
 
     public bool $is_ban = false;
 
-    public int $user_id;
-
     // Gestion image
 
     public $image;
@@ -109,6 +107,10 @@ class EditUser extends Component
         $this->lastname = $this->user->lastname;
         $this->email = $this->user->email;
         $this->postalcode = $this->user->postalcode;
+        $this->city = $this->user->city;
+        $this->department = $this->user->department;
+        $this->city_lat = $this->user->city_lat;
+        $this->city_long = $this->user->city_long;
         $this->password = '';
         $this->status = $this->user->status;
         $this->is_ban = $this->user->is_ban;
@@ -151,7 +153,7 @@ class EditUser extends Component
                     'password' => $this->creatingNewUser ? ['required', Password::min(8)] : ['nullable'],
                     'status' => [new EnumValue(UserStatus::class)],
                     'is_ban' => ['boolean'],
-                    'image' => $this->creatingNewUser ? ['nullable', 'image', 'mimes:jpg,png,svg,webp', 'max:1024'] : ['nullable', 'image', 'mimes:jpg,png,svg', 'max:1024'],
+                    'image' => ['nullable', 'image', 'mimes:jpg,png,svg,webp', 'max:1024'],
 
                 ],
                 $this->messages()
@@ -162,15 +164,15 @@ class EditUser extends Component
                 $validatedData[$val] = Str::ucfirst($validatedData[$val]);
             }
 
+            $validatedData['password'] = Hash::make($this->password);
+            $validatedData['city'] = $this->city;
+            $validatedData['department'] = $this->department;
+            $validatedData['city_lat'] = $this->city_lat;
+            $validatedData['city_long'] = $this->city_long;
+
             if ($this->creatingNewUser)  // on cree un nouveau user
             {
-                $validatedData['image'] = $this->manageImage();
-                $validatedData['password'] = Hash::make($this->password);
-                $validatedData['city'] = $this->city;
-                $validatedData['department'] = $this->department;
-                $validatedData['city_lat'] = $this->city_lat;
-                $validatedData['city_long'] = $this->city_long;
-
+                isset($this->image) ? $validatedData['image'] = $this->manageImage() : $validatedData['image'] = 'defaultuser.webp';
 
                 User::create($validatedData);
 
@@ -178,13 +180,8 @@ class EditUser extends Component
                 redirect()->route('admin.dashboard')->with('message', 'Votre nouvel utilisateur a bien été créé.');
             } else {   // On update un user existant
 
-                // On vérifie si le user a changer son image
+                // on vérifie si l'image a été changée
                 isset($this->image) ? $validatedData['image'] = $this->manageImage() : $validatedData['image'] = $this->user->image;
-                $validatedData['password'] = Hash::make($this->password);
-                $validatedData['city'] = $this->city;
-                $validatedData['department'] = $this->department;
-                $validatedData['city_lat'] = $this->city_lat;
-                $validatedData['city_long'] = $this->city_long;
 
                 $this->user->update($validatedData);
 
@@ -225,20 +222,17 @@ class EditUser extends Component
                 Storage::disk('public')->delete('images/users/' . $this->user->image);
             }
             $image_name = $this->user->id . '_' . Str::random();
-        } else {
-            
-            if (isset($this->image)) {
-                // Si l'utilisateur n'existe pas
-                $image_name = '00-' . Str::random();
-            }
-        }
-        if (isset($this->image)) {
 
-            // Intervention Image pour encoder en webp
-            $image = Image::make($this->image);
-            $image->encode('webp');
-            $image->save(public_path('storage/images/users/' . $image_name . '.webp'));
+        } else {
+
+            // l'utilisateur n'existe pas
+            $image_name = '00-' . Str::random();
         }
+
+        // Intervention Image pour encoder en webp
+        $image = Image::make($this->image);
+        $image->encode('webp');
+        $image->save(public_path('storage/images/users/' . $image_name . '.webp'));
 
         return $image_name . '.webp';
     }
