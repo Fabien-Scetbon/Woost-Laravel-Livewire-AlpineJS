@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $items = [
-            ['nom' => 'Tag1'],
-            ['nom' => 'Tag2'],
-            ['nom' => 'Tag3'],
-            ['nom' => 'Tag4'],
-            ['nom' => 'Tag5'],
+            ['name' => 'Tag1'],
+            ['name' => 'Tag2'],
+            ['name' => 'Tag3'],
+            ['name' => 'Tag4'],
+            ['name' => 'Tag5'],
         ];
 
         DB::table('tags')->insert($items);
