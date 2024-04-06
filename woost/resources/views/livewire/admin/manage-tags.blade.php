@@ -9,7 +9,7 @@
 
                     <div class="mt-6 flex flex-col">
                         <div class="flex justify-between flex-1 mb-2 sm:mb-0 sm:hidden">
-                            <!-- include('backend.partials.paginator-mobile', ['paginator' => $this->listeTags]) -->
+                            <!-- include('backend.partials.paginator-mobile', ['paginator' => $this->tags]) -->
                         </div>
                         <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -19,11 +19,11 @@
                                             <div>
                                                 <p class="text-sm text-gray-700 leading-5">
                                                     <span>Résultats de</span>
-                                                    <span class="font-medium">{{ $this->listeTags->firstItem() }}</span>
+                                                    <span class="font-medium">{{ $this->tags->firstItem() }}</span>
                                                     <span>à</span>
-                                                    <span class="font-medium">{{ $this->listeTags->lastItem() }}</span>
+                                                    <span class="font-medium">{{ $this->tags->lastItem() }}</span>
                                                     <br />(
-                                                    <span class="font-medium">{{ $this->listeTags->total() }}</span>
+                                                    <span class="font-medium">{{ $this->tags->total() }}</span>
                                                     <span>résultats</span>)
                                                 </p>
                                             </div>
@@ -36,7 +36,7 @@
                                                 <div class="flex-1 mt-2 text-sm text-gray-900">tags par page</div>
                                             </div>
                                             <div>
-                                                {{ $this->listeTags->onEachSide(1)->links() }}
+                                                {{ $this->tags->onEachSide(1)->links() }}
                                             </div>
                                         </div>
                                     </div>
@@ -44,10 +44,10 @@
                                     <table class="min-w-full table-fixed divide-y divide-gray-300">
                                         <thead class="bg-gray-50">
                                             <tr>
-                                                <th wire:click="toggleSorting('nom')" scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-bold text-gray-900 px-6 sm:w-16 sm:px-8 hover:cursor-pointer hover:text-gray-500">
+                                                <th wire:click="toggleSorting('name')" scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-bold text-gray-900 px-6 sm:w-16 sm:px-8 hover:cursor-pointer hover:text-gray-500">
                                                     <div class="flex items-center">
                                                         Nom
-                                                        @if($sortBy === 'nom')
+                                                        @if($sortBy === 'name')
                                                         <x-arrow-sorting :ascending="$ascending" />
                                                         @endif
                                                     </div>
@@ -55,7 +55,7 @@
                                                 <th wire:click="toggleSorting('nb_articles')" scope="col" class="whitespace-nowrap px-3 py-4 text-sm font-bold text-gray-900 hover:cursor-pointer hover:text-gray-500">
                                                     <div class="flex items-center justify-center">
                                                         Nombre d'articles associés
-                                                        @if($sortBy === 'nb_articles')
+                                                        @if($sortBy === 'nb_publications')
                                                         <x-arrow-sorting :ascending="$ascending" />
                                                         @endif
                                                     </div>
@@ -73,13 +73,13 @@
                                                 </td>
                                             </tr>
 
-                                            @forelse($this->listeTags as $tag)
+                                            @forelse($this->tags as $tag)
                                             <tr>
                                                 <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 px-6">
-                                                    {{ $tag->nom }}
+                                                    {{ $tag->name }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium text-gray-900">{{ $tag->articles->count() }}</span>
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium text-gray-900">15</span> <!-- $tag->publications->count() -->
                                                 </td>
                                             </tr>
                                             @empty
@@ -97,16 +97,16 @@
                                             <div>
                                                 <p class="text-sm text-gray-700 leading-5">
                                                     <span>Résultats de</span>
-                                                    <span class="font-medium">{{ $this->listeTags->firstItem() }}</span>
+                                                    <span class="font-medium">{{ $this->tags->firstItem() }}</span>
                                                     <span>à</span>
-                                                    <span class="font-medium">{{ $this->listeTags->lastItem() }}</span>
+                                                    <span class="font-medium">{{ $this->tags->lastItem() }}</span>
                                                     <br />(
-                                                    <span class="font-medium">{{ $this->listeTags->total() }}</span>
+                                                    <span class="font-medium">{{ $this->tags->total() }}</span>
                                                     <span>résultats</span>)
                                                 </p>
                                             </div>
                                             <div>
-                                                {{ $this->listeTags->onEachSide(1)->links() }}
+                                                {{ $this->tags->onEachSide(1)->links() }}
                                             </div>
                                         </div>
                                     </div>
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="flex flex-1 justify-between sm:hidden mt-5 sm:mt-0">
-                        <!-- include('backend.partials.paginator-mobile', ['paginator' => $this->listeTags]) -->
+                        <!-- include('backend.partials.paginator-mobile', ['paginator' => $this->tags]) -->
                     </div>
                 </div>
             </div>

@@ -50,7 +50,7 @@
                         @endif
                         <div class="mt-6 flex flex-col">
                             <div class="flex justify-between flex-1 mb-2 sm:mb-0 sm:hidden">
-                                <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p>
+                                <!-- <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p> -->
                             </div>
                             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -232,7 +232,7 @@
                             </div>
                         </div>
                         <div class="flex flex-1 justify-between sm:hidden mt-5 sm:mt-0">
-                            <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p>
+                            <!-- <p> include('backend.partials.paginator-mobile', ['paginator' => $this->users])</p> -->
                         </div>
                     </div>
                 </div>

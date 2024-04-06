@@ -98,7 +98,7 @@
                     </div>
 
                     <div x-show="openBigTab == 4">
-                        <!-- livewire('admin.manage-tags') -->
+                        @livewire('admin.manage-tags')
                     </div>
 
                     <div x-show="openBigTab == 5">

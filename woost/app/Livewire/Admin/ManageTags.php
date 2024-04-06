@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin;
+namespace App\Livewire\Admin;
 
 // use App\Models\Publication;
 use App\Models\Tag;
@@ -28,10 +28,10 @@ class ManageTags extends Component
     // détecter quelle colonne doit être triée
     private function getSortColumn()
     {
-        // return match ($this->sortBy) {
-        //     'nb_articles' => 'articles_count',
-        //     default => 'nom',
-        // };
+        return match ($this->sortBy) {
+            'nb_articles' => 'articles_count',
+            default => 'name',
+        };
     }
 
     // recupère la liste des tags
@@ -47,7 +47,7 @@ class ManageTags extends Component
 
         $order = $this->ascending ? 'asc' : 'desc';
 
-        return $articles->orderBy($this->getSortColumn(), $order)
+        return $tags->orderBy($this->getSortColumn(), $order)
             ->paginate($this->showTag);
     }
 
@@ -60,6 +60,6 @@ class ManageTags extends Component
             $this->ascending = true;
         }
 
-        $this->getListeTagsProperty();
+        $this->tags();
     }
 }
