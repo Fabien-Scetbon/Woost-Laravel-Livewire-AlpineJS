@@ -3,25 +3,25 @@
 namespace App\Livewire\Admin;
 
 // use App\Models\Publication;
-use App\Models\Tag;
+use App\Models\Level;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 
-class ManageTags extends Component
+class ManageLevels extends Component
 {
     use WithPagination;
 
-    public int $showTag = 10;
+    public int $showLevel = 10;
 
     // variables pour la recherche
 
-    public $searchTag = '';
+    public $searchLevel = '';
 
     // gere l'affichage des tags par asc et desc selon 2 critères
 
-    public $sortBy = 'nom'; // par défaut
+    public $sortBy = 'name'; // par défaut
 
     public $ascending = true;
 
@@ -29,26 +29,26 @@ class ManageTags extends Component
     private function getSortColumn()
     {
         return match ($this->sortBy) {
-            'nb_articles' => 'articles_count',
+            'nb_members' => 'members_count',
             default => 'name',
         };
     }
 
     // recupère la liste des tags
     #[Computed]
-    public function tags(): LengthAwarePaginator
+    public function levels(): LengthAwarePaginator
     {
-        $tags = Tag::select('id', 'name')                  // ::with('publications')
+        $levels = Level::select('id', 'name')                  // ::with('publications')
             
             // ->withcount('articles')
-            ->when($this->searchTag, function ($query, $searchTag) {
-                $query->where('nom', 'like', '%' . $searchTag . '%');
+            ->when($this->searchLevel, function ($query, $searchLevel) {
+                $query->where('name', 'like', '%' . $searchLevel . '%');
             });
 
         $order = $this->ascending ? 'asc' : 'desc';
 
-        return $tags->orderBy($this->getSortColumn(), $order)
-            ->paginate($this->showTag);
+        return $levels->orderBy($this->getSortColumn(), $order)
+            ->paginate($this->showLevel);
     }
 
     public function toggleSorting($column)
@@ -60,6 +60,6 @@ class ManageTags extends Component
             $this->ascending = true;
         }
 
-        $this->tags();
+        $this->levels();
     }
 }

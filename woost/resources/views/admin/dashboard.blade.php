@@ -18,7 +18,7 @@
                         <option selected value="1">Utilisateurs</option>
                         <option value="2">Publications</option>
                         <option value="3">Catégories</option>
-                        <option value="4">Tags</option>
+                        <option value="4">Niveaux</option>
                         <option value="5">Item 5</option>
                         <option value="6">Statistiques</option>
                     </select>
@@ -59,7 +59,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
                             </svg>
 
-                            <span>Tags</span>
+                            <span>Niveaux</span>
                             <span aria-hidden="true" :class="openBigTab === 4 ? activeBigTabClasses : inactiveBigTabClasses" class="absolute inset-x-0 bottom-0 h-0.5">
                             </span>
                         </a>
@@ -98,7 +98,7 @@
                     </div>
 
                     <div x-show="openBigTab == 4">
-                        @livewire('admin.manage-tags')
+                        @livewire('admin.manage-levels')
                     </div>
 
                     <div x-show="openBigTab == 5">

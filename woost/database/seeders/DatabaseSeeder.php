@@ -16,14 +16,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $items = [
-            ['name' => 'Tag1'],
-            ['name' => 'Tag2'],
-            ['name' => 'Tag3'],
-            ['name' => 'Tag4'],
-            ['name' => 'Tag5'],
+            ['name' => '6ème'],
+            ['name' => '5ème'],
+            ['name' => '4ème'],
+            ['name' => '3ème'],
+            ['name' => '2nde'],
+            ['name' => '1ère'],
+            ['name' => 'Tle'],
+
         ];
 
-        DB::table('tags')->insert($items);
+        DB::table('levels')->insert($items);
 
         $this->call([
             UserSeeder::class,
