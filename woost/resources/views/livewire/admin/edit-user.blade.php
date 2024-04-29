@@ -152,17 +152,17 @@
 
                                     <fieldset class="mt-3">
                                         <div class="space-y-2">
-                                            <div class="flex items-center">
-                                                <input wire:model.defer="status" id="visitor" name="status" type="radio" value="{{\App\Enums\UserStatus::Visitor}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                                <label for="visitor" class="ml-3 block text-sm leading-6 text-gray-900">Visiteur</label>
-                                            </div>
-                                            <div class="flex items-center">
+                                        <div class="flex items-center">
                                                 <input wire:model.defer="status" id="member" name="status" type="radio" value="{{\App\Enums\UserStatus::Member}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="member" class="ml-3 block text-sm leading-6 text-gray-900">Membre</label>
                                             </div>
                                             <div class="flex items-center">
                                                 <input wire:model.defer="status" id="admin" name="status" type="radio" value="{{\App\Enums\UserStatus::Admin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                 <label for="admin" class="ml-3 block text-sm leading-6 text-gray-900">Admin</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input wire:model.defer="status" id="superadmin" name="status" type="radio" value="{{\App\Enums\UserStatus::Superadmin}}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <label for="superadmin" class="ml-3 block text-sm leading-6 text-gray-900">SuperAdmin</label>
                                             </div>
                                         </div>
                                         @error('status') <small class="text-red-500">{{ $message }}</small> @enderror

@@ -13,8 +13,7 @@ use BenSampo\Enum\Enum;
  */
 final class UserStatus extends Enum
 {
-
-    const Visitor = 1;
-    const Member = 2;
-    const Admin = 3;
+    const Member = 1;
+    const Admin = 2;
+    const Superadmin = 3;
 }
