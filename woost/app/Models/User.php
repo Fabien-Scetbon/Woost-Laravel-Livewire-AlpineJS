@@ -23,15 +23,15 @@ class User extends Authenticatable
         'firstname',
         'lastname',
         'email',
+        'phonenumber',
         'postalcode',
         'city',
         'department',
-        'city_lat',
-        'city_long',
         'status',
         'is_ban',
         'password',
         'image',
+        'level_id',
     ];
 
     /**
