@@ -4,6 +4,14 @@
 
 /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 
+/* couleur violette */
+
+/* liens actifs #814dd5 */
+/* logo #c69fff */
+/* navbar #a67fe4 */
+/* shape #e8d9ff */
+
+
 /*
 Document
 ========
@@ -282,6 +290,7 @@ Correct the cursor style of increment and decrement buttons in Safari.
 
 [type='search'] {
   -webkit-appearance: textfield;
+  appearance: textfield;
   /* 1 */
   outline-offset: -2px;
   /* 2 */
@@ -389,6 +398,7 @@ html {
 body {
   font-family: inherit;
   line-height: inherit;
+  background-color: #e8d9ff;
 }
 
 /**
@@ -560,8 +570,6 @@ embed,
 object {
   display: block;
   /* 1 */
-  vertical-align: middle;
-  /* 2 */
 }
 
 /**
@@ -665,6 +673,10 @@ video {
   left: 0px;
 }
 
+.left-50{
+  left: 50px;
+}
+
 .top-full{
   top: 100%;
 }
@@ -687,6 +699,10 @@ video {
 
 .left-\[40\%\]{
   left: 40%;
+}
+
+.top-\[90px\]{
+  top: 90px;
 }
 
 .top-\[120px\]{
@@ -765,6 +781,10 @@ video {
   right: 1.75rem;
 }
 
+.-right-80{
+  right: -80px
+}
+
 .top-1\/2{
   top: 50%;
 }
@@ -839,6 +859,10 @@ video {
 
 .ml-5{
   margin-left: 1.25rem;
+}
+
+.ml-15{
+  margin-left: 3.75rem;
 }
 
 .mt-8{
@@ -1096,6 +1120,11 @@ video {
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }
 
+.bg-violet-dark{
+  --tw-bg-opacity: 1;
+  background-color: #86469C;
+}
+
 .bg-\[\#FBFBFF\]{
   --tw-bg-opacity: 1;
   background-color: rgba(251, 251, 255, var(--tw-bg-opacity));
@@ -1280,6 +1309,11 @@ video {
   line-height: 36px;
 }
 
+.text-\[\#814DD5\]{
+  --tw-text-opacity: 1;
+  color: #814dd5;
+}
+
 .text-\[\#38424D\]{
   --tw-text-opacity: 1;
   color: rgba(56, 66, 77, var(--tw-text-opacity));
@@ -1376,13 +1410,13 @@ body {
   overflow: hidden;
   border-radius: 9999px;
   --tw-bg-opacity: 1;
-  background-color: rgba(56, 66, 77, var(--tw-bg-opacity));
+  background-color: #c69fff;
   padding-left: 2.5rem;
   padding-right: 2.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.3rem;
   line-height: 1.5rem;
   font-weight: 500;
   --tw-text-opacity: 1;
@@ -1444,22 +1478,28 @@ body {
   transform: rotate(135deg);
 }
 
+.navbar-area{
+  background-color: #a67fe4;
+  opacity: 90%;
+}
+
 .navbar-nav .nav-item a{
   position: relative;
   z-index: 10;
   display: inline-block;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  font-size: 1rem;
+  font-size: 20px;
   line-height: 1.5rem;
   font-weight: 400;
   --tw-text-opacity: 1;
-  color: rgba(116, 126, 136, var(--tw-text-opacity));
+  color: white;
 }
 
 .navbar-nav .nav-item a:hover{
   --tw-text-opacity: 1;
-  color: rgba(249, 79, 79, var(--tw-text-opacity));
+  font-weight: 600;
+  color:  white;
 }
 
 @media (min-width: 1024px){
@@ -1471,7 +1511,8 @@ body {
 
 .navbar-nav .nav-item a.active{
   --tw-text-opacity: 1;
-  color: rgba(249, 79, 79, var(--tw-text-opacity));
+  font-weight: 600;
+  color: #6d37c4;
 }
 
 .navbar-collapse.show{
@@ -1488,7 +1529,7 @@ body {
   --tw-skew-x: -15deg;
   transform: var(--tw-transform);
   --tw-bg-opacity: 1;
-  background-color: rgba(245, 245, 252, var(--tw-bg-opacity));
+  background-color: #e8d9ff;
 }
 
 .single_service{
@@ -1781,9 +1822,13 @@ body {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
-
 .group:hover .group-hover\:opacity-100{
   opacity: 1;
+}
+
+#logo_image {
+  width: 18rem;
+  height: 3.5rem;
 }
 
 @media (min-width: 640px){

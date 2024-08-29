@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Laravel</title>
+<title>Epsilon34</title>
 
 <!-- Fonts -->
 <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet" /> -->
@@ -40,9 +40,9 @@
                     <div class="w-full">
                         <nav class="flex items-center justify-between navbar-nav py-3 navbar navbar-expand-lg
                 ">
-                            <a class="navbar-brand mr-5" href="index.html">
-                                <img src="assets/images/logo.svg" alt="Logo" />
-                            </a>
+                            <div class="navbar-brand mr-5">
+                                <img src="assets/images/logo.png" alt="Logo" class="w-32 h-32 object-cover rounded-full" id="logo_image" />
+                            </div>
 
                             <button
                                 class="block navbar-toggler focus:outline-none lg:hidden">
@@ -51,15 +51,14 @@
                                 <span class="toggler-icon"> </span>
                             </button>
 
-                            <div class="absolute left-0 z-20 hidden w-full px-5 py-3 duration-[300ms] lg:w-auto lg:block top-full mt-full lg:static  shadow lg:shadow-none"
-                            id="navbarOne">
-                                <ul id="nav" class="items-center content-start mr-auto lg:justify-end navbar-nav lg:flex
-                    ">
+                            <div class="absolute left-0 z-20 hidden w-full px-5 py-3 duration-[300ms] bg-violet-dark lg:w-auto collapse navbar-collapse lg:block top-full mt-full lg:static lg:bg-transparent shadow lg:shadow-none"
+                                id="navbarOne">
+                                <ul id="nav" class="items-center content-start mr-auto lg:justify-end navbar-nav lg:flex">
                                     <li class="nav-item ml-5 lg:ml-[44px]">
-                                        <a class="page-scroll active" href="#home">Home</a>
+                                        <a class="page-scroll active" href="#home">Accueil</a>
                                     </li>
                                     <li class="nav-item ml-5 lg:ml-[44px]">
-                                        <a class="page-scroll" href="#about">About</a>
+                                        <a class="page-scroll" href="#about">A propos</a>
                                     </li>
                                     <li class="nav-item ml-5 lg:ml-[44px]">
                                         <a class="page-scroll" href="#services">Services</a>
@@ -68,7 +67,7 @@
                                         <a class="page-scroll" href="#work">Projects</a>
                                     </li>
                                     <li class="nav-item ml-5 lg:ml-[44px]">
-                                        <a class="page-scroll" href="#pricing">Pricing</a>
+                                        <a class="page-scroll" href="#pricing">Tarifs</a>
                                     </li>
                                     <li class="nav-item ml-5 lg:ml-[44px]">
                                         <a class="page-scroll" href="#blog">Blog</a>
@@ -121,7 +120,7 @@
                 <img src="assets/images/shape/shape-1.svg" alt="shape" />
             </div>
             <!-- hero shape -->
-            <div class="absolute opacity-40 z-[-10] top-[60%] left-[80px]">
+            <div class="absolute opacity-40 z-[-10] top-[120px] left-[80px]">
                 <img src="assets/images/shape/shape-4.svg" alt="shape" />
             </div>
             <!-- hero shape -->
@@ -153,23 +152,33 @@
                             <h2
                                 class="
                     hero_title
-                    text-[#38424D] text-[32px]
+                    text-[#38424D] 
+                    text-[32px]
                     sm:text-[42px]
                     md:text-[55px]
                     lg:text-[42px]
                     xl:text-[55px]
                     font-extrabold
                     leading-snug
-                  ">
-                                Creative Multipurpose Tailwind CSS
-                                <span class="text-[#F94F4F]">Template</span>
+                  ">Cours de mathématiques et langages informatiques
                             </h2>
-                            <p class="mt-8 max-w-[525px] md:text-lg">
-                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                                diam nonumy eirmod tempor invidunt ut labore et dolore magna.
+                            <h2
+                                class="
+                    hero_title
+                    text-[#814DD5]                    
+                    text-[32px]
+                    sm:text-[42px]
+                    md:text-[55px]
+                    lg:text-[42px]
+                    xl:text-[55px]
+                    font-extrabold
+                    leading-snug
+                  ">tous niveaux</h2>
+                            <p class="mt-8 max-w-[525px] text-[#814DD5]" style="font-size: 1.5rem;";>
+                                L'expertise dans le domaine des cours particuliers à domicile ou en visio
                             </p>
                             <div class="hero_btn mt-10">
-                                <a class="main-btn" href="javascript:void(0)">Get Started</a>
+                                <a class="main-btn" href="#contact">Contacter</a>
                             </div>
                         </div>
                         <!-- header hero content -->
@@ -196,23 +205,23 @@
             flex
             items-center
             lg:absolute
-            top-0
-            right-0
+            top-[90px]
+            -right-80
             w-full
             lg:w-1/2
             h-auto
             lg:h-full
-            mx-auto
             mt-[52px]
             lg:mt-0
             px-5
-            lg:px-0
+            lg:pl-5
           ">
                 <div class="image 2xl:pl-25">
                     <img
-                        src="assets/images/header-image.svg"
+                        src="assets/images/header-image.png"
                         alt="Header Image"
-                        class="max-w-full lg:w-auto xl:max-w-screen-md" />
+                        class="max-w-full lg:w-auto xl:max-w-screen-md rounded-xl" />
+                    <p style="font-size: 10px; text-align: right;">Image Freepik</p>
                 </div>
             </div>
             <!-- header image -->

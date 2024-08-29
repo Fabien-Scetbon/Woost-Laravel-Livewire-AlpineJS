@@ -5,11 +5,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css',
-                'resources/js/app.js',
-                'resources/assets/css/tiny-slider.css',
-                'resources/assets/css/lineicons.css',
-                'resources/assets/js/tiny-slider.js',
-                'resources/assets/js/main.js'],
+                'resources/js/app.js',],
             refresh: true,
         }),
     ],
